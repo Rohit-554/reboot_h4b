@@ -53,16 +53,42 @@ class _LandingPageState extends State<LandingPage> {
       backgroundColor: const Color(0xff181818),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        centerTitle: true,
-        // leading: const CircleAvatar(
-        //   foregroundColor: Colors.pink,
-        // ),
-        // actions: [
-        //   CustomButton(
-        //     onPressed: () {},
-        //     title: 'Continue',
-        //   ),
-        // ],
+        // centerTitle: true,
+        title: Text(
+          "Converse With",
+          style: GoogleFonts.tomorrow(
+            textStyle: TextStyle(
+              color: Colors.white,
+              fontSize: 32,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+        ),
+        actions: [
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              foregroundColor: Colors.white, backgroundColor: Colors.transparent,
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+              shape: RoundedRectangleBorder(
+                side: BorderSide(width: 1, color: Colors.white),
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
+            onPressed: () {
+              // Define the action when the button is pressed
+            },
+            child: Text(
+              'Try Now',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontFamily: 'Clash Display',
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          )
+
+        ],
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -492,45 +518,6 @@ class _LandingPageState extends State<LandingPage> {
   }
 }
 
-class CustomButton extends StatelessWidget {
-  final VoidCallback onPressed;
-  final Color color;
-  final String title;
-  final bool isBorderOnly;
-  const CustomButton({
-    super.key,
-    required this.onPressed,
-    this.color = const Color(0xff4452FE),
-    required this.title,
-    this.isBorderOnly = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            foregroundColor: Colors.white, backgroundColor: color, // text color
-            padding: const EdgeInsets.all(8.0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(2),
-              side: isBorderOnly
-                  ? const BorderSide(color: Colors.white, width: 2)
-                  : const BorderSide(color: Colors.transparent),
-            ),
-          ),
-          onPressed: onPressed,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              title,
-              style: const TextStyle(color: Colors.white),
-            ),
-          ),
-        ));
-  }
-}
 
 class TitleSubtitle extends StatelessWidget {
   final String title;
