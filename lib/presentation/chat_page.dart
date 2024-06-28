@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:tiktik_v/presentation/settingsPage.dart';
 
-class ChatPage extends StatefulWidget {
+class ChatPage extends ConsumerStatefulWidget {
   const ChatPage({Key? key}) : super(key: key);
 
   @override
   ChatPageState createState() => ChatPageState();
 }
 
-class ChatPageState extends State<ChatPage> {
+class ChatPageState extends ConsumerState<ChatPage> {
+
   final List<Map<String, String>> _messages = []; // List to hold message maps
   final TextEditingController _controller = TextEditingController();
   List<bool> isSelected = [true, false];
@@ -39,7 +42,8 @@ class ChatPageState extends State<ChatPage> {
             borderRadius: BorderRadius.circular(20),
           ),
 
-          child: ToggleButtons(
+          child:
+          ToggleButtons(
             borderColor: Colors.grey,
             selectedBorderColor: Colors.grey,
             borderRadius: BorderRadius.circular(20),
@@ -78,6 +82,27 @@ class ChatPageState extends State<ChatPage> {
             ],
           ),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(50),
+                color: Colors.white.withOpacity(0.4),
+              ),
+              child: IconButton(
+                icon: const Icon(
+                  Icons.settings,
+                  size: 32,
+                  color: Colors.white54,
+                ),
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const ConnectionScreen()));
+                },
+              ),
+            ),
+          ),
+        ],
         leading: const Padding(
           padding: EdgeInsets.all(8.0),
           child: Row(

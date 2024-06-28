@@ -5,6 +5,7 @@ import 'package:tiktik_v/presentation/use_case/get_chat_use_case.dart';
 
 import '../injection_container.dart';
 import '../utils/responsive.dart';
+import 'chat_page.dart';
 
 
 
@@ -19,7 +20,7 @@ class _LandingPageState extends State<LandingPage> {
   @override
   void initState() {
     super.initState();
-    _connectToDatabase();
+   /* _connectToDatabase();*/
   }
 
   void _connectToDatabase() async{
@@ -34,12 +35,12 @@ class _LandingPageState extends State<LandingPage> {
         database: 'retail_db',
       );
       print("Response${response.data}");
+
       var chatResponse = await chatUseCase.execute(chatId: response.data!, query: "Which is the best performing product in terms of revenue?");
       print("Chatresponse${chatResponse.data}");
     }catch(e){
       print(e);
     }
-
   }
   @override
   Widget build(BuildContext context) {
@@ -143,7 +144,7 @@ class _LandingPageState extends State<LandingPage> {
         CustomButton(
           title: "Try Now",
           onPressed: () {
-            // Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage()));
           },
         ),
       ],

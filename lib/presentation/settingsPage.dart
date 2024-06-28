@@ -4,7 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tiktik_v/presentation/use_case/connect_to_database_use_case.dart';
+import 'package:tiktik_v/presentation/use_case/get_chat_use_case.dart';
 import 'package:tiktik_v/provider/StateProviders.dart';
+
+import '../injection_container.dart';
 
 
 class ConnectionScreen extends ConsumerStatefulWidget {
@@ -15,6 +19,7 @@ class ConnectionScreen extends ConsumerStatefulWidget {
 }
 
 class _ConnectionScreenState extends ConsumerState<ConnectionScreen> {
+  bool isLoading = false;
   TextEditingController host = TextEditingController(text: '');
   TextEditingController user = TextEditingController(text: '');
   TextEditingController password = TextEditingController(text: '');
@@ -85,7 +90,12 @@ class _ConnectionScreenState extends ConsumerState<ConnectionScreen> {
                       ),
                       onPressed: () {
                         updateProviders();
-                        if (!isConnectedToLg) _connectToLG();
+                        if (!ref.read(isDatabaseConnected)) {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          _connectToDatabase(ref,host.text,user.text,password.text,dataBase.text);
+                        }
                       },
                       child: const Text(
                         "Connect To Database",
@@ -141,8 +151,26 @@ class _ConnectionScreenState extends ConsumerState<ConnectionScreen> {
   }
 }
 
-void _connectToLG() {
+void _connectToDatabase(WidgetRef ref, String host, String user, String password, String database) async{
 
+  final useCase = sl<ConnectToDatabaseUseCase>();
+  final chatUseCase = sl<GetChatUseCase>();
+
+  try {
+    var response = await useCase.execute(
+      host: host,
+      user: user,
+      password: password,
+      database: database,
+    );
+    print("Response${response.data}");
+    ref.read(isDatabaseConnected.notifier).state = true;
+    ref.read(ChatId.notifier).state = response.data!;
+    // var chatResponse = await chatUseCase.execute(chatId: response.data!, query: "Which is the best performing product in terms of revenue?");
+    // print("Chatresponse${chatResponse.data}");
+  }catch(e){
+    print(e);
+  }
 }
 
 
