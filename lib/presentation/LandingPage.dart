@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:glowy_borders/glowy_borders.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import 'package:tiktik_v/presentation/use_case/connect_to_database_use_case.dart';
 import 'package:tiktik_v/presentation/use_case/get_chat_use_case.dart';
 
@@ -35,12 +37,12 @@ class _LandingPageState extends State<LandingPage> {
         database: 'retail_db',
       );
       print("Response${response.data}");
-
       var chatResponse = await chatUseCase.execute(chatId: response.data!, query: "Which is the best performing product in terms of revenue?");
       print("Chatresponse${chatResponse.data}");
     }catch(e){
       print(e);
     }
+
   }
   @override
   Widget build(BuildContext context) {
@@ -62,45 +64,20 @@ class _LandingPageState extends State<LandingPage> {
         //   ),
         // ],
       ),
-      body: SingleChildScrollView(
-        child: Center(
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/hero.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Stack(
-                children: [
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      _largeImageSection(context, height),
-                      Column(
-                        children: [
-                          SizedBox(
-                            width: width*0.8,
-                            child: Image.asset(
-                              'assets/pc.png',
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          const SizedBox(height: 40,),
-                          _startButton(context),
+              _sectionOne(context),
 
-                        ],
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      children: [
-                        _sectionOne(context),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: height * 0.1),
               SizedBox(height: height * 0.1),
               _featureSection(context, height),
               SizedBox(height: height * 0.1),
@@ -117,23 +94,41 @@ class _LandingPageState extends State<LandingPage> {
   }
 
   Widget _sectionOne(BuildContext context) {
-    return const Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(top: 28.0),
-          child: Text("Revolutionizing the way of database",textAlign: TextAlign.center,
-              style: TextStyle(
+    return  SizedBox(
+      height:  MediaQuery.of(context).size.height,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(top: 28.0),
+            child: Center(
+              child: Text(
+                "Revolutionizing the way of database",
+                style: GoogleFonts.hankenGrotesk(
+                  textStyle: TextStyle(
+                    color: Colors.white,
+                    fontSize: 40,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Text('This is a subtitle',
+              style: TextStyle(color: Colors.white, fontSize: 20)),
+          SizedBox(height: 20),
+          SizedBox(
+            height: 410,
+            child: Lottie.asset(
+              'assets/orb.json',
+              repeat: true,
+            ),
+          ),
+          _startButton(context),
 
-                  color: Colors.white,
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold)),
-        ),
-        Text('This is a subtitle',
-            style: TextStyle(color: Colors.white, fontSize: 20)),
-        SizedBox(height: 20),
-      ],
+        ],
+      ),
     );
   }
 
@@ -145,29 +140,49 @@ class _LandingPageState extends State<LandingPage> {
           title: "Try Now",
           onPressed: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage()));
+        GestureDetector(
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage()));
           },
+          child: Container(
+            width: 210,
+            height: 48,
+            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 8),
+            decoration: BoxDecoration(
+              color: Color(0xFF9C08FF),
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: [
+                BoxShadow(
+                  color: Color(0xFF9C08FF).withOpacity(0.5), // Glow color
+                  spreadRadius: 5,
+                  blurRadius: 20,
+                  offset: Offset(0, 0), // changes position of shadow
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'Try Now',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontFamily: 'Clash Display',
+                    fontWeight: FontWeight.w600,
+                    height: 1.0, // Adjusted height for better text alignment
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ],
     );
   }
 
-  Widget _largeImageSection(BuildContext context, double height) {
-    return  Responsive.isDesktop(context)? Container(
-        height: height,
-        width: double.infinity,
-        color: Colors.transparent,
-        child: Image.asset(
-          'assets/hero.png',
-          fit: BoxFit.cover,
-        )): Container(
-        height: height,
-        width: double.infinity,
-        color: Colors.transparent,
-        child: Image.asset(
-          'assets/hero.png',
-          fit: BoxFit.cover,
-        ));
-  }
 
   Widget _featureSection(BuildContext context, double height) {
     return SizedBox(
