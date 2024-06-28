@@ -173,8 +173,14 @@ class ChatPageState extends State<ChatPage> {
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(50),
-
                           color: Colors.white.withOpacity(0.4),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 4,
+                              offset: Offset(2, 2),
+                            ),
+                          ],
                         ),
                         child: IconButton(
                           icon: const Icon(
@@ -193,7 +199,13 @@ class ChatPageState extends State<ChatPage> {
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.4),
                           borderRadius: BorderRadius.circular(50),
-
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 4,
+                              offset: Offset(2, 2),
+                            ),
+                          ],
                         ),
                         padding: const EdgeInsets.symmetric(
                           horizontal: 16.0,
@@ -204,7 +216,7 @@ class ChatPageState extends State<ChatPage> {
                             hintText: 'Type a message',
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.all(
-                                Radius.circular(10.0),
+                                Radius.circular(50.0),
                               ),
                               borderSide: BorderSide.none,
                             ),
@@ -220,9 +232,16 @@ class ChatPageState extends State<ChatPage> {
                           color: Colors.transparent,
                           borderRadius: BorderRadius.circular(50),
                           border: Border.all(
-                            color: Color(0xFFD7FE62),  // You can change the color of the border
-                            width: 2.0,           // Adjust the width of the border
+                            color: Color(0xFFD7FE62),
+                            width: 2.0,
                           ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 4,
+                              offset: Offset(2, 2),
+                            ),
+                          ],
                         ),
                         child: IconButton(
                           icon: const Icon(
@@ -237,12 +256,18 @@ class ChatPageState extends State<ChatPage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.all(8.0),
                       child: Container(
-
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(50),
                           color: Colors.white.withOpacity(0.4),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 4,
+                              offset: Offset(2, 2),
+                            ),
+                          ],
                         ),
                         child: IconButton(
                           icon: const Icon(
@@ -260,7 +285,7 @@ class ChatPageState extends State<ChatPage> {
                     ),
                   ],
                 ),
-              ),
+              )
             ],
           ),
         ),
