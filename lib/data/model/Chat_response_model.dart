@@ -11,6 +11,7 @@ class ChatResponseModel {
 
   factory ChatResponseModel.fromMap(Map<String, dynamic> map) {
     return ChatResponseModel(
+
       code: map['code'],
       message: map['message'],
       table: map['table'],
