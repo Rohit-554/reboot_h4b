@@ -1,6 +1,10 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tiktik_v/data/model/Chat_response_model.dart';
 import 'package:tiktik_v/data/model/api_response_model.dart';
+
+import '../provider/StateProviders.dart';
 
 class ApiResponse<T> {
   T? data;
@@ -56,6 +60,17 @@ class ApiService {
     }
   }
 
+  void disconnect(WidgetRef ref) async{
+    try{
+      final response = await dio.post(closeConnectionUrl);
+      if(response.statusCode==200){
+        ref.read(chatIdProvider.notifier).state = '';
+        ref.read(isDatabaseConnected.notifier).state = false;
+      }
+    }catch(e){
+      print(e);
+    }
+  }
   Future<List<String>?> getChat(
       {required String chatId, required String query}) async {
     final Map<String, String> body = {
@@ -77,6 +92,9 @@ class ApiService {
         }
         if (data.containsKey('table')) {
           responseList.add(data['table']);
+        }
+        if(data.containsKey('datapoints')){
+          responseList.add(data['datapoints']);
         }
         print('Response datax: $responseList');
         return responseList;

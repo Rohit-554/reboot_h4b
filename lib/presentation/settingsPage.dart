@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tiktik_v/api_service/ApiService.dart';
 import 'package:tiktik_v/presentation/use_case/connect_to_database_use_case.dart';
 import 'package:tiktik_v/presentation/use_case/get_chat_use_case.dart';
 import 'package:tiktik_v/provider/StateProviders.dart';
@@ -90,7 +91,7 @@ class _ConnectionScreenState extends ConsumerState<ConnectionScreen> {
                       ),
                       onPressed: () {
                         updateProviders();
-                        if (isConnectedToLg) {
+                        if (ref.watch(isDatabaseConnected)) {
                           _disconnectFromDatabase(ref);
                         } else {
                           setState(() {
@@ -181,6 +182,12 @@ class _ConnectionScreenState extends ConsumerState<ConnectionScreen> {
   }
 
   void _disconnectFromDatabase(WidgetRef ref) {
+    ApiService().disconnect(ref);
+    SnackBar snackBar = SnackBar(
+      content: Text('Disconnected from database'),
+      duration: const Duration(seconds: 2),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
     ref.read(chatIdProvider.notifier).state = '';
     ref.read(isDatabaseConnected.notifier).state = false;
   }
