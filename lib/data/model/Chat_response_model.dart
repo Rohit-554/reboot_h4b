@@ -21,7 +21,7 @@ class ChatResponseModel {
     return {
       'code': code,
       'message': message,
-      'table': table,
+      'total_revenue': table,
     };
   }
 }

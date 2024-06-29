@@ -10,7 +10,7 @@ abstract class ApiRepository {
     required String database,
   });
 
-  Future<ApiResponse<String>> getChat({
+  Future<ChatResponseModel?> getChat({
     required String chatId,
     required String query
   });

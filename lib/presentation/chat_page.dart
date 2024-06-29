@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:tiktik_v/api_service/ApiService.dart';
+import 'package:tiktik_v/data/model/Chat_response_model.dart';
 import 'package:tiktik_v/presentation/settingsPage.dart';
 import 'package:tiktik_v/presentation/use_case/get_chat_use_case.dart';
 import 'package:tiktik_v/provider/StateProviders.dart';
@@ -17,10 +18,10 @@ class ChatPage extends ConsumerStatefulWidget {
 }
 
 class ChatPageState extends ConsumerState<ChatPage> {
-  final List<Map<String, String>> _messages = []; // List to hold message maps
+  final List<Map<String, String>> _messages = [];
   final TextEditingController _controller = TextEditingController();
   List<bool> isSelected = [true, false];
-  late Future<ApiResponse<String>> _botResponse;
+  late Future<ChatResponseModel?> _botResponse;
 
   @override
   void initState() {
@@ -41,17 +42,16 @@ class ChatPageState extends ConsumerState<ChatPage> {
     }
   }
 
-  Future<ApiResponse<String>> getAiResponse(WidgetRef ref, String query) async {
+  Future<ChatResponseModel?> getAiResponse(WidgetRef ref, String query) async {
     final chatUseCase = sl<GetChatUseCase>();
     var chatResponse = await chatUseCase.execute(chatId: ref.read(chatIdProvider), query: query);
     setState(() {
-
       _messages.add({
         "role": "Bot", // Assuming "Bot" as the role for bot messages
-        "text": chatResponse.data ?? "Error: No response",
+        "text": chatResponse?.code ?? "Error: No response",
       });
     });
-    print("this is bot response ${chatResponse.data}");
+    print("this is bot response ${chatResponse?.code}");
     return chatResponse;
   }
 

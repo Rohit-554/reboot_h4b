@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
+import 'chat_page.dart';
+
 class MediatorPage extends StatefulWidget {
   const MediatorPage({super.key});
 
@@ -153,7 +155,7 @@ class _MediatorPageState extends State<MediatorPage> with WidgetsBindingObserver
               ),
               GestureDetector(
                 onTap: () {
-                  // Define action for the third container
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage()));
                 },
                 child: _buildRoundedContainer(
                   height / 3,

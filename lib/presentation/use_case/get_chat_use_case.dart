@@ -1,4 +1,5 @@
 import 'package:tiktik_v/api_service/ApiService.dart';
+import 'package:tiktik_v/data/model/Chat_response_model.dart';
 import 'package:tiktik_v/domain/repository/api_repository.dart';
 
 class GetChatUseCase {
@@ -6,7 +7,7 @@ class GetChatUseCase {
 
   GetChatUseCase({required this.apiRepository});
 
-  Future<ApiResponse<String>> execute({
+  Future<ChatResponseModel?> execute({
     required String chatId,
     required String query
   }) async {

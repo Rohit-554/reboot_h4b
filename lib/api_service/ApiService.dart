@@ -55,7 +55,7 @@ class ApiService {
     }
   }
 
-  Future<ApiResponse> getChat({required String chatId, required String query}) async {
+  Future<ChatResponseModel?> getChat({required String chatId, required String query}) async {
     final Map<String, String> body = {
       "query": query,
       "chat_id": chatId,
@@ -68,7 +68,7 @@ class ApiService {
         print('Response data: $data');
         final successResponse = ChatResponseModel.fromMap(data);
         print("successResponse${successResponse.message}");
-        return ApiResponse(data: successResponse.message);
+        return successResponse;
         /*if (data is Map<String, dynamic> && (data.containsKey('message') || data.containsKey('code')) ) {
           final successResponse = ChatResponseModel.fromMap(data);
           return ApiResponse(data: successResponse.message);
@@ -79,12 +79,12 @@ class ApiService {
           return ApiResponse(error: 'Unknown response format');
         }*/
       }else {
-        return ApiResponse(error: 'Received invalid status code ${response.statusCode}');
+        return null;
       }
     } on DioException catch (e) {
-      return ApiResponse(error: 'Dio error: ${e.message}');
+      return null;
     } catch (e) {
-      return ApiResponse(error: 'Unexpected error: $e');
+      return null;
     }
   }
 }
