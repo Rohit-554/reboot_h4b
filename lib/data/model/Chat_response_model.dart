@@ -19,9 +19,9 @@ class ChatResponseModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'product_id': code,
-      'product_name': message,
-      'total_revenue': table,
+      'code': code,
+      'message': message,
+      'table': table,
     };
   }
 }

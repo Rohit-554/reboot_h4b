@@ -32,6 +32,7 @@ class ApiRepositoryImpl implements ApiRepository {
   Future<ApiResponse<String>> getChat({required String chatId,required String query}) async {
     try{
       final response = await apiService.getChat(chatId: chatId, query: query);
+      print("response is ${response.data}");
       return ApiResponse(data: response.data);
     }catch(e){
       return ApiResponse(error: 'Error connecting to database: $e');

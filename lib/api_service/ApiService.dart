@@ -66,18 +66,20 @@ class ApiService {
       if (response.statusCode == 200) {
         final data = response.data;
         print('Response data: $data');
-        if (data is Map<String, dynamic> && data.containsKey('chat_id')) {
-          final successResponse = SuccessResponse.fromJson(data);
-          return ApiResponse(data: successResponse.chatId);
+        final successResponse = ChatResponseModel.fromMap(data);
+        print("successResponse${successResponse.message}");
+        return ApiResponse(data: successResponse.message);
+        /*if (data is Map<String, dynamic> && (data.containsKey('message') || data.containsKey('code')) ) {
+          final successResponse = ChatResponseModel.fromMap(data);
+          return ApiResponse(data: successResponse.message);
         } else if (data is Map<String, dynamic> && data.containsKey('error')) {
           final errorResponse = ErrorResponse.fromJson(data);
           return ApiResponse(error: errorResponse.error);
         } else {
           return ApiResponse(error: 'Unknown response format');
-        }
+        }*/
       }else {
-        return ApiResponse(
-            error: 'Received invalid status code ${response.statusCode}');
+        return ApiResponse(error: 'Received invalid status code ${response.statusCode}');
       }
     } on DioException catch (e) {
       return ApiResponse(error: 'Dio error: ${e.message}');

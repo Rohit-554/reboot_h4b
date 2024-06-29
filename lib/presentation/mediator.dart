@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:tiktik_v/presentation/chat_page.dart';
 
 class MediatorPage extends StatefulWidget {
   const MediatorPage({super.key});
@@ -156,13 +157,19 @@ class _MediatorPageState extends State<MediatorPage> with WidgetsBindingObserver
                         repeat: true,
                         height: 210,
                       ),
-                      Text(
-                        "Converse Now",
-                        style: GoogleFonts.tomorrow(
-                          textStyle: TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.w800,
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage()));
+                          // Define action for the button
+                        },
+                        child: Text(
+                          "Converse Now",
+                          style: GoogleFonts.tomorrow(
+                            textStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                              fontWeight: FontWeight.w800,
+                            ),
                           ),
                         ),
                       ),

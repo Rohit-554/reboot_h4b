@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:tiktik_v/api_service/ApiService.dart';
 import 'package:tiktik_v/presentation/settingsPage.dart';
+import 'package:tiktik_v/presentation/use_case/get_chat_use_case.dart';
 import 'package:tiktik_v/provider/StateProviders.dart';
+
+import '../injection_container.dart';
 
 class ChatPage extends ConsumerStatefulWidget {
   const ChatPage({Key? key}) : super(key: key);
@@ -13,15 +17,16 @@ class ChatPage extends ConsumerStatefulWidget {
 }
 
 class ChatPageState extends ConsumerState<ChatPage> {
+  final List<Map<String, String>> _messages = []; // List to hold message maps
+  final TextEditingController _controller = TextEditingController();
+  List<bool> isSelected = [true, false];
+  late Future<ApiResponse<String>> _botResponse;
 
   @override
   void initState() {
     super.initState();
     print("ChatId data ${ref.read(chatIdProvider)}");
   }
-  final List<Map<String, String>> _messages = []; // List to hold message maps
-  final TextEditingController _controller = TextEditingController();
-  List<bool> isSelected = [true, false];
 
   void fromUserText({required String query}) {
     if (_controller.text.isNotEmpty) {
@@ -32,7 +37,22 @@ class ChatPageState extends ConsumerState<ChatPage> {
         });
         _controller.clear();
       });
+      _botResponse = getAiResponse(ref, query);
     }
+  }
+
+  Future<ApiResponse<String>> getAiResponse(WidgetRef ref, String query) async {
+    final chatUseCase = sl<GetChatUseCase>();
+    var chatResponse = await chatUseCase.execute(chatId: ref.read(chatIdProvider), query: query);
+    setState(() {
+
+      _messages.add({
+        "role": "Bot", // Assuming "Bot" as the role for bot messages
+        "text": chatResponse.data ?? "Error: No response",
+      });
+    });
+    print("this is bot response ${chatResponse.data}");
+    return chatResponse;
   }
 
   @override
@@ -47,9 +67,7 @@ class ChatPageState extends ConsumerState<ChatPage> {
             color: Colors.white.withOpacity(0.4),
             borderRadius: BorderRadius.circular(20),
           ),
-
-          child:
-          ToggleButtons(
+          child: ToggleButtons(
             borderColor: Colors.grey,
             selectedBorderColor: Colors.grey,
             borderRadius: BorderRadius.circular(20),
@@ -194,7 +212,6 @@ class ChatPageState extends ConsumerState<ChatPage> {
                   },
                 ),
               ),
-
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
@@ -324,5 +341,6 @@ class ChatPageState extends ConsumerState<ChatPage> {
     );
   }
 }
+
 
 
