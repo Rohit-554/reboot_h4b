@@ -22,28 +22,9 @@ class _LandingPageState extends State<LandingPage> {
   @override
   void initState() {
     super.initState();
-   /* _connectToDatabase();*/
   }
 
-  void _connectToDatabase() async{
-    final useCase = sl<ConnectToDatabaseUseCase>();
-    final chatUseCase = sl<GetChatUseCase>();
 
-    try {
-      var response = await useCase.execute(
-        host: 'ms.itversity.com',
-        user: 'retail_user',
-        password: 'itversity',
-        database: 'retail_db',
-      );
-      print("Response${response.data}");
-      var chatResponse = await chatUseCase.execute(chatId: response.data!, query: "Which is the best performing product in terms of revenue?");
-      print("Chatresponse${chatResponse.data}");
-    }catch(e){
-      print(e);
-    }
-
-  }
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;

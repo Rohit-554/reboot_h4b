@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tiktik_v/injection_container.dart';
 import 'package:tiktik_v/presentation/LandingPage.dart';
+import 'package:tiktik_v/presentation/mediator.dart';
 import 'package:tiktik_v/theme/appTheme.dart';
 
 
@@ -35,7 +36,7 @@ class _MyAppState extends State<MyApp> {
           appBarTheme: appBarTheme(),
           useMaterial3: true,
         ),
-        home: const LandingPage()
+        home: const MediatorPage()
     );
   }
 }
