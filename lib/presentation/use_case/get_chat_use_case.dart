@@ -7,7 +7,7 @@ class GetChatUseCase {
 
   GetChatUseCase({required this.apiRepository});
 
-  Future<ChatResponseModel?> execute({
+  Future<List<String>?> execute({
     required String chatId,
     required String query
   }) async {

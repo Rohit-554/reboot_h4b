@@ -29,7 +29,7 @@ class ApiRepositoryImpl implements ApiRepository {
   }
 
   @override
-  Future<ChatResponseModel?> getChat({required String chatId,required String query}) async {
+  Future<List<String>?> getChat({required String chatId,required String query}) async {
     try{
       final response = await apiService.getChat(chatId: chatId, query: query);
       return response;

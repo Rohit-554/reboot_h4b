@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: CustomMarkdownTable(),
+          child: CustomMarkdownTable(markDownData: '',),
         ),
       ),
     );
@@ -25,9 +25,11 @@ class MyApp extends StatelessWidget {
 
 
 class CustomMarkdownTable extends StatelessWidget {
+  final String markDownData;
+  CustomMarkdownTable({required this.markDownData});
   @override
   Widget build(BuildContext context) {
-    const markdownData = """
+    /*const markdownData = """
 {code: 
 sql
 SELECT 
@@ -49,10 +51,10 @@ LIMIT 1;
 | --- | --- | --- |
 | 1004 | Field & Stream Sportsman 16 Gun Fire Safe | 6929653.690338135|
 }
-""";
+""";*/
 
     return Markdown(
-      data: markdownData,
+      data: markDownData,
       styleSheet: MarkdownStyleSheet(
         tableBorder: TableBorder.all(borderRadius: BorderRadius.circular(5),color: Colors.grey,style: BorderStyle.solid,width: 1),
         tableVerticalAlignment: TableCellVerticalAlignment.middle,
@@ -61,7 +63,6 @@ LIMIT 1;
           fontWeight: FontWeight.bold,
           color: Colors.pink,
         ),
-
         tableBody: TextStyle(
           fontSize: 14,
           color: Colors.black,

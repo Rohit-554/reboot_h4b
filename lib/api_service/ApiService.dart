@@ -10,7 +10,7 @@ class ApiResponse<T> {
 }
 
 class ApiService {
-  static const String baseUrl = 'http://13.201.224.184';
+  static const String baseUrl = 'http://3.109.213.8';
   static const String connectUrl = '$baseUrl/connect_old';
   static const String chatUrl = '$baseUrl/generate_response';
   static const String closeConnectionUrl = '$baseUrl/close_connection';
@@ -35,6 +35,7 @@ class ApiService {
       if (response.statusCode == 200) {
         final data = response.data;
         print('Response data: $data');
+
         if (data is Map<String, dynamic> && data.containsKey('chat_id')) {
           final successResponse = SuccessResponse.fromJson(data);
           return ApiResponse(data: successResponse.chatId);
@@ -55,30 +56,31 @@ class ApiService {
     }
   }
 
-  Future<ChatResponseModel?> getChat({required String chatId, required String query}) async {
+  Future<List<String>?> getChat(
+      {required String chatId, required String query}) async {
     final Map<String, String> body = {
       "query": query,
       "chat_id": chatId,
     };
+    List<String> responseList = [];
 
     try {
       final response = await dio.post(chatUrl, data: body);
+      print("this is the code" + response.data['message']);
       if (response.statusCode == 200) {
         final data = response.data;
-        print('Response data: $data');
-        final successResponse = ChatResponseModel.fromMap(data);
-        print("successResponse${successResponse.message}");
-        return successResponse;
-        /*if (data is Map<String, dynamic> && (data.containsKey('message') || data.containsKey('code')) ) {
-          final successResponse = ChatResponseModel.fromMap(data);
-          return ApiResponse(data: successResponse.message);
-        } else if (data is Map<String, dynamic> && data.containsKey('error')) {
-          final errorResponse = ErrorResponse.fromJson(data);
-          return ApiResponse(error: errorResponse.error);
-        } else {
-          return ApiResponse(error: 'Unknown response format');
-        }*/
-      }else {
+        if (data.containsKey('message')) {
+          responseList.add(data['message']);
+        }
+        if (data.containsKey('code')) {
+          responseList.add(data['code']);
+        }
+        if (data.containsKey('table')) {
+          responseList.add(data['table']);
+        }
+        print('Response datax: $responseList');
+        return responseList;
+      } else {
         return null;
       }
     } on DioException catch (e) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -21,7 +22,7 @@ class ChatPageState extends ConsumerState<ChatPage> {
   final List<Map<String, String>> _messages = [];
   final TextEditingController _controller = TextEditingController();
   List<bool> isSelected = [true, false];
-  late Future<ChatResponseModel?> _botResponse;
+  late Future<List<String>?> _botResponse;
 
   @override
   void initState() {
@@ -42,16 +43,21 @@ class ChatPageState extends ConsumerState<ChatPage> {
     }
   }
 
-  Future<ChatResponseModel?> getAiResponse(WidgetRef ref, String query) async {
+  Future<List<String>?> getAiResponse(WidgetRef ref, String query) async {
     final chatUseCase = sl<GetChatUseCase>();
     var chatResponse = await chatUseCase.execute(chatId: ref.read(chatIdProvider), query: query);
-    setState(() {
-      _messages.add({
-        "role": "Bot", // Assuming "Bot" as the role for bot messages
-        "text": chatResponse?.code ?? "Error: No response",
+    print("chatREsponse ${chatResponse}");
+    if(chatResponse!=null){
+      var len = chatResponse.length;
+      setState(() {
+        for(int i=0;i<len;i++){
+          _messages.add({
+            "role": "Bot",
+            "text": chatResponse[i] ?? "Error: No response",
+          });
+        }
       });
-    });
-    print("this is bot response ${chatResponse?.code}");
+    }
     return chatResponse;
   }
 
@@ -193,13 +199,57 @@ class ChatPageState extends ConsumerState<ChatPage> {
                                   color: Color(0xFFD7FE62),
                                   borderRadius: borderRadius,
                                 ),
-                                child: Text(
-                                  _messages[index]["text"]!,
-                                  style: GoogleFonts.sourceCodePro(
-                                    textStyle: TextStyle(
-                                      color: Color(0xFF252525),
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
+                                child: MarkdownBody(
+                                  data: _messages[index]["text"]!,
+                                  styleSheet: MarkdownStyleSheet(
+                                    p: GoogleFonts.sourceCodePro(
+                                      textStyle: TextStyle(
+                                        color: Color(0xFF252525),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    h1: GoogleFonts.sourceCodePro(
+                                      textStyle: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 32,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    h2: GoogleFonts.sourceCodePro(
+                                      textStyle: TextStyle(
+                                        color: Colors.black87,
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    h3: GoogleFonts.sourceCodePro(
+                                      textStyle: TextStyle(
+                                        color: Colors.black54,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    code: GoogleFonts.sourceCodePro(
+                                      textStyle: TextStyle(
+                                        color: Colors.blueAccent,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    blockquote: GoogleFonts.sourceCodePro(
+                                      textStyle: TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 14,
+                                        fontStyle: FontStyle.italic,
+                                      ),
+                                    ),
+                                    listBullet: GoogleFonts.sourceCodePro(
+                                      textStyle: TextStyle(
+                                        color: Color(0xFF252525),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                      ),
                                     ),
                                   ),
                                 ),
