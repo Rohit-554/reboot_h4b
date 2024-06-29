@@ -99,65 +99,46 @@ class _MediatorPageState extends State<MediatorPage> with WidgetsBindingObserver
           ),
         ),
         SizedBox(height: 16), // Add space between sections
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            GestureDetector(
-              onTap: () {
-                // Define action for the first container
-              },
-              child: _buildRoundedContainer(
-                  height / 3, width / 1.9, Color(0xFF212121)),
-            ),
-            GestureDetector(
-              onTap: () {
-                // Define action for the second container
-              },
-              child: _buildRoundedContainer(
-                height / 3,
-                width / 5.1,
-                Colors.transparent,
-                Column(
-                  children: [
-                    Lottie.asset(
-                      'assets/graph.json',
-                      repeat: true,
-                      height: 210,
-                    ),
-                    Text(
-                      "Visualize",
-                      style: GoogleFonts.tomorrow(
-                        textStyle: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                    ),
-                  ],
+        SizedBox(
+          width: width,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  // Define action for the first container
+                },
+                child: Container(
+                  height: height/3,
+                  width: width/1.89,
+
+                  margin:
+                  EdgeInsets.symmetric(horizontal: 8.0), // Add space between containers
+                  decoration: BoxDecoration(
+                    color: Color(0xFF212121).withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(15),
+                    border: Border.all(color: Colors.white, width: 0.5),
+                  ),
+
                 ),
               ),
-            ),
-            GestureDetector(
-              onTap: () {
-                // Define action for the third container
-              },
-              child: _buildRoundedContainer(
-                height / 3,
-                width / 5.1,
-                Colors.transparent,
-                SizedBox(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+              GestureDetector(
+                onTap: () {
+                  // Define action for the second container
+                },
+                child: _buildRoundedContainer(
+                  height / 3,
+                  width / 5.1,
+                  Colors.transparent,
+                  Column(
                     children: [
                       Lottie.asset(
-                        'assets/orb.json',
+                        'assets/graph.json',
                         repeat: true,
                         height: 210,
                       ),
                       Text(
-                        "Converse Now",
+                        "Visualize",
                         style: GoogleFonts.tomorrow(
                           textStyle: TextStyle(
                             color: Colors.white,
@@ -170,8 +151,41 @@ class _MediatorPageState extends State<MediatorPage> with WidgetsBindingObserver
                   ),
                 ),
               ),
-            ),
-          ],
+              GestureDetector(
+                onTap: () {
+                  // Define action for the third container
+                },
+                child: _buildRoundedContainer(
+                  height / 3,
+                  width / 5.1,
+                  Colors.transparent,
+                  SizedBox(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Lottie.asset(
+                          'assets/orb.json',
+                          repeat: true,
+                          height: 210,
+                        ),
+                        Text(
+                          "Converse Now",
+                          style: GoogleFonts.tomorrow(
+                            textStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );
