@@ -3,14 +3,7 @@ import 'package:glowy_borders/glowy_borders.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:tiktik_v/presentation/settingsPage.dart';
-import 'package:tiktik_v/presentation/use_case/connect_to_database_use_case.dart';
-import 'package:tiktik_v/presentation/use_case/get_chat_use_case.dart';
-
-import '../injection_container.dart';
 import '../utils/responsive.dart';
-import 'chat_page.dart';
-import 'mediator.dart';
-
 
 
 class LandingPage extends StatefulWidget {
@@ -26,7 +19,6 @@ class _LandingPageState extends State<LandingPage> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -36,11 +28,11 @@ class _LandingPageState extends State<LandingPage> {
       backgroundColor: const Color(0xff181818),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        centerTitle: Responsive.isDesktop(context)? false:true,
+        centerTitle: Responsive.isDesktop(context) ? false : true,
         title: Text(
           "Converse With",
           style: GoogleFonts.tomorrow(
-            textStyle: TextStyle(
+            textStyle: const TextStyle(
               color: Colors.white,
               fontSize: 32,
               fontWeight: FontWeight.w800,
@@ -48,33 +40,39 @@ class _LandingPageState extends State<LandingPage> {
           ),
         ),
         actions: [
-          Responsive.isDesktop(context)?  ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.white, backgroundColor: Colors.transparent,
-              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
-              shape: RoundedRectangleBorder(
-                side: BorderSide(width: 1, color: Colors.white),
-                borderRadius: BorderRadius.circular(4),
-              ),
-            ),
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => ConnectionScreen()));
-            },
-            child: Text(
-              'Try Now',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontFamily: 'Clash Display',
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ): Container()
-
+          Responsive.isDesktop(context)
+              ? ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.transparent,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 40, vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      side: const BorderSide(width: 1, color: Colors.white),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const ConnectionScreen()));
+                  },
+                  child: const Text(
+                    'Try Now',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontFamily: 'Clash Display',
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                )
+              : Container()
         ],
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/hero.png'),
             fit: BoxFit.cover,
@@ -102,19 +100,20 @@ class _LandingPageState extends State<LandingPage> {
   }
 
   Widget _sectionOne(BuildContext context) {
-    return  SizedBox(
-      height:  MediaQuery.of(context).size.height,
+    return SizedBox(
+      height: MediaQuery.of(context).size.height,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(top: 28.0),
+            padding: const EdgeInsets.only(top: 28.0),
             child: Center(
               child: Text(
                 "Revolutionizing the way of database",
+                textAlign: TextAlign.center,
                 style: GoogleFonts.hankenGrotesk(
-                  textStyle: TextStyle(
+                  textStyle: const TextStyle(
                     color: Colors.white,
                     fontSize: 40,
                     fontWeight: FontWeight.w800,
@@ -123,9 +122,12 @@ class _LandingPageState extends State<LandingPage> {
               ),
             ),
           ),
-          Text('This is a subtitle',
-              style: TextStyle(color: Colors.white, fontSize: 20)),
-          SizedBox(height: 20),
+          const Text(
+            'This is a subtitle',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          const SizedBox(height: 20),
           SizedBox(
             height: 410,
             child: Lottie.asset(
@@ -134,7 +136,6 @@ class _LandingPageState extends State<LandingPage> {
             ),
           ),
           _startButton(context),
-
         ],
       ),
     );
@@ -146,25 +147,26 @@ class _LandingPageState extends State<LandingPage> {
       children: [
         GestureDetector(
           onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => ConnectionScreen()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const ConnectionScreen()));
           },
           child: Container(
             width: 210,
             height: 48,
             padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 8),
             decoration: BoxDecoration(
-              color: Color(0xFF9C08FF),
+              color: const Color(0xFF9C08FF),
               borderRadius: BorderRadius.circular(8),
               boxShadow: [
                 BoxShadow(
-                  color: Color(0xFF9C08FF).withOpacity(0.5), // Glow color
+                  color: const Color(0xFF9C08FF).withOpacity(0.5), // Glow color
                   spreadRadius: 5,
                   blurRadius: 20,
-                  offset: Offset(0, 0), // changes position of shadow
+                  offset: const Offset(0, 0), // changes position of shadow
                 ),
               ],
             ),
-            child: Row(
+            child: const Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -187,77 +189,28 @@ class _LandingPageState extends State<LandingPage> {
     );
   }
 
-
   Widget _featureSection(BuildContext context, double height) {
     return SizedBox(
       height: height,
       width: double.infinity,
-      child: Responsive.isDesktop(context)? Column(
-        children: <Widget>[
-          const TitleSubtitle(
-              title: "Features",
-              subtitle: "Heuheuheu This is a feature subtitle"),
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Container(
-                  height: height * 0.5,
-                  color: Colors.transparent,
-                  child: Image.asset(
-                    'assets/hero.png',
-                    fit: BoxFit.cover,
-                  )),
-              Column(
-                children: [
-                  featureItem(
-                    title: "Feature 1",
-                    subtitle: "This is a feature subtitle",
-                    icon: Icons.restaurant,
-                  ),
-                  const SizedBox(height: 20),
-                  featureItem(
-                    title: "Feature 2",
-                    subtitle: "This is a feature subtitle",
-                    icon: Icons.ac_unit,
-                  ),
-                  const SizedBox(height: 20),
-                  featureItem(
-                    title: "Feature 3",
-                    subtitle: "This is a feature subtitle",
-                    icon: Icons.face_unlock_outlined,
-                  ),
-                ],
-              ),
-            ],
-          )
-        ],
-      ):Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          const TitleSubtitle(
-              title: "Features",
-              subtitle: "Heuheuheu This is a feature subtitle"),
-          const SizedBox(height: 20),
-          Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
+      child: Responsive.isDesktop(context)
+          ? Column(
               children: <Widget>[
-                Center(
-                  child: Container(
-                      height: height * 0.5,
-                      color: Colors.transparent,
-                      child: Image.asset(
-                        'assets/hero.png',
-                        fit: BoxFit.cover,
-                      )),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 4,left: 32.0),
-                  child: Center(
-                    child: Column(
+                const TitleSubtitle(
+                    title: "Features",
+                    subtitle: "Heuheuheu This is a feature subtitle"),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Container(
+                        height: height * 0.5,
+                        color: Colors.transparent,
+                        child: Image.asset(
+                          'assets/hero.png',
+                          fit: BoxFit.cover,
+                        )),
+                    Column(
                       children: [
                         featureItem(
                           title: "Feature 1",
@@ -278,20 +231,70 @@ class _LandingPageState extends State<LandingPage> {
                         ),
                       ],
                     ),
+                  ],
+                )
+              ],
+            )
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                const TitleSubtitle(
+                    title: "Features",
+                    subtitle: "Heuheuheu This is a feature subtitle"),
+                const SizedBox(height: 20),
+                Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Center(
+                        child: Container(
+                            height: height * 0.5,
+                            color: Colors.transparent,
+                            child: Image.asset(
+                              'assets/hero.png',
+                              fit: BoxFit.cover,
+                            )),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4, left: 32.0),
+                        child: Center(
+                          child: Column(
+                            children: [
+                              featureItem(
+                                title: "Feature 1",
+                                subtitle: "This is a feature subtitle",
+                                icon: Icons.restaurant,
+                              ),
+                              const SizedBox(height: 20),
+                              featureItem(
+                                title: "Feature 2",
+                                subtitle: "This is a feature subtitle",
+                                icon: Icons.ac_unit,
+                              ),
+                              const SizedBox(height: 20),
+                              featureItem(
+                                title: "Feature 3",
+                                subtitle: "This is a feature subtitle",
+                                icon: Icons.face_unlock_outlined,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
+                )
               ],
             ),
-          )
-        ],
-      ),
     );
   }
 
   Widget featureItem(
       {required String title,
-        required String subtitle,
-        required IconData icon}) {
+      required String subtitle,
+      required IconData icon}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -312,122 +315,146 @@ class _LandingPageState extends State<LandingPage> {
     );
   }
 
-  Widget _contentSection(BuildContext context,double height) {
+  Widget _contentSection(BuildContext context, double height) {
     return SizedBox(
       height: height,
       width: double.infinity,
-      child:   Responsive.isDesktop(context)?const Column(children: <Widget>[
-        TitleSubtitle(title: "Contents", subtitle: "This is a content subtitle"),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            CustomCard(
-                title: "Work", subtitle: "This is a blablabla", icon: Icons.work),
-            CustomCard(
-                title: "Work", subtitle: "This is a blablabla", icon: Icons.work),
-          ],
-        )
-      ]):const Column(children: <Widget>[
-        TitleSubtitle(title: "Contents", subtitle: "This is a content subtitle"),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            CustomCard(
-                title: "Work", subtitle: "This is a blablabla", icon: Icons.work),
-            CustomCard(
-                title: "Work", subtitle: "This is a blablabla", icon: Icons.work),
-          ],
-        )
-      ]),
+      child: Responsive.isDesktop(context)
+          ? const Column(children: <Widget>[
+              TitleSubtitle(
+                  title: "Contents", subtitle: "This is a content subtitle"),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CustomCard(
+                      title: "Work",
+                      subtitle: "This is a blablabla",
+                      icon: Icons.work),
+                  CustomCard(
+                      title: "Work",
+                      subtitle: "This is a blablabla",
+                      icon: Icons.work),
+                ],
+              )
+            ])
+          : const Column(children: <Widget>[
+              TitleSubtitle(
+                  title: "Contents", subtitle: "This is a content subtitle"),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CustomCard(
+                      title: "Work",
+                      subtitle: "This is a blablabla",
+                      icon: Icons.work),
+                  CustomCard(
+                      title: "Work",
+                      subtitle: "This is a blablabla",
+                      icon: Icons.work),
+                ],
+              )
+            ]),
     );
   }
 
-  Widget _testimonials()  {
-    return  Responsive.isDesktop(context)? const Column(
-      children: <Widget>[
-        TitleSubtitle(title: "Team Reboot", subtitle: "About Us"),
-        Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                CustomProfileBorderCard(
-                    name: "Sai Kishan",
-                    role: "Flutter Dev & UI/UX",
-                    description: "Design and Code Beautiful",
-                    imageUrl: "https://api.dicebear.com/9.x/fun-emoji/svg?seed=Patches"),
-                CustomProfileBorderCard(
-                    name: "Ujjwal Kumar Singh",
-                    role: "Backend Lord",
-                    description: "Kneel before the lord!",
-                    imageUrl: "https://api.dicebear.com/9.x/fun-emoji/svg?seed=Missy")
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                CustomProfileBorderCard(
-                    name: "Rohit Kumar",
-                    role: "Flutter dev",
-                    description: "I am very weird person, don't touch my code",
-                    imageUrl: "https://api.dicebear.com/9.x/fun-emoji/svg?seed=Tigger"),
-                CustomProfileBorderCard(
-                    name: "Saumya Bhattacharya",
-                    role: "Flutter Dev",
-                    description:
-                    "Debugging through chaos, one widget at a time.",
-                    imageUrl: "https://api.dicebear.com/9.x/fun-emoji/svg?seed=Baby")
-              ],
-            ),
-          ],
-        )
-      ],
-    ): const Column(
-      children: <Widget>[
-        TitleSubtitle(title: "Team Reboot", subtitle: "About Us"),
-        Column(
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                CustomProfileBorderCard(
-                    name: "Sai Kishan",
-                    role: "Flutter Dev & UI/UX",
-                    description: "Design and Code Beautiful",
-                    imageUrl: "https://api.dicebear.com/9.x/fun-emoji/svg?seed=Patches"),
-                CustomProfileBorderCard(
-                    name: "Ujjwal Kumar Singh",
-                    role: "Backend Lord",
-                    description: "Kneel before the lord!",
-                    imageUrl: "https://api.dicebear.com/9.x/fun-emoji/svg?seed=Missy")
-              ],
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                CustomProfileBorderCard(
-                    name: "Rohit Kumar",
-                    role: "Flutter dev",
-                    description: "I am very weird person, don't touch my code",
-                    imageUrl: "https://api.dicebear.com/9.x/fun-emoji/svg?seed=Tigger"),
-                CustomProfileBorderCard(
-                    name: "Saumya Bhattacharya",
-                    role: "Flutter Dev",
-                    description:
-                    "Debugging through chaos, one widget at a time.",
-                    imageUrl: "https://api.dicebear.com/9.x/fun-emoji/svg?seed=Baby")
-              ],
-            ),
-          ],
-        )
-      ],
-    );
+  Widget _testimonials() {
+    return Responsive.isDesktop(context)
+        ? const Column(
+            children: <Widget>[
+              TitleSubtitle(title: "Team Reboot", subtitle: "About Us"),
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CustomProfileBorderCard(
+                          name: "Sai Kishan",
+                          role: "Flutter Dev & UI/UX",
+                          description: "Design and Code Beautiful",
+                          imageUrl:
+                              "https://api.dicebear.com/9.x/fun-emoji/svg?seed=Patches"),
+                      CustomProfileBorderCard(
+                          name: "Ujjwal Kumar Singh",
+                          role: "Backend Lord",
+                          description: "Kneel before the lord!",
+                          imageUrl:
+                              "https://api.dicebear.com/9.x/fun-emoji/svg?seed=Missy")
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CustomProfileBorderCard(
+                          name: "Rohit Kumar",
+                          role: "Flutter dev",
+                          description:
+                              "I am very weird person, don't touch my code",
+                          imageUrl:
+                              "https://api.dicebear.com/9.x/fun-emoji/svg?seed=Tigger"),
+                      CustomProfileBorderCard(
+                          name: "Saumya Bhattacharya",
+                          role: "Flutter Dev",
+                          description:
+                              "Debugging through chaos, one widget at a time.",
+                          imageUrl:
+                              "https://api.dicebear.com/9.x/fun-emoji/svg?seed=Baby")
+                    ],
+                  ),
+                ],
+              )
+            ],
+          )
+        : const Column(
+            children: <Widget>[
+              TitleSubtitle(title: "Team Reboot", subtitle: "About Us"),
+              Column(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CustomProfileBorderCard(
+                          name: "Sai Kishan",
+                          role: "Flutter Dev & UI/UX",
+                          description: "Design and Code Beautiful",
+                          imageUrl:
+                              "https://api.dicebear.com/9.x/fun-emoji/svg?seed=Patches"),
+                      CustomProfileBorderCard(
+                          name: "Ujjwal Kumar Singh",
+                          role: "Backend Lord",
+                          description: "Kneel before the lord!",
+                          imageUrl:
+                              "https://api.dicebear.com/9.x/fun-emoji/svg?seed=Missy")
+                    ],
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CustomProfileBorderCard(
+                          name: "Rohit Kumar",
+                          role: "Flutter dev",
+                          description:
+                              "I am very weird person, don't touch my code",
+                          imageUrl:
+                              "https://api.dicebear.com/9.x/fun-emoji/svg?seed=Tigger"),
+                      CustomProfileBorderCard(
+                          name: "Saumya Bhattacharya",
+                          role: "Flutter Dev",
+                          description:
+                              "Debugging through chaos, one widget at a time.",
+                          imageUrl:
+                              "https://api.dicebear.com/9.x/fun-emoji/svg?seed=Baby")
+                    ],
+                  ),
+                ],
+              )
+            ],
+          );
   }
 
   Widget _footer(double height, double width) {
@@ -439,7 +466,7 @@ class _LandingPageState extends State<LandingPage> {
           borderRadius: BorderRadius.circular(10),
         ),
         width:
-        width * 0.9, // Adjusted width to ensure it fits within the screen
+            width * 0.9, // Adjusted width to ensure it fits within the screen
         height: height * 0.3,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -452,11 +479,18 @@ class _LandingPageState extends State<LandingPage> {
                 children: [
                   Text(
                     "OpenType feature\nand Variable fonts",
-                    style: TextStyle(color: Colors.white, fontSize: Responsive.isDesktop(context)? 36:20),
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: Responsive.isDesktop(context) ? 36 : 20),
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const ConnectionScreen()));
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xff6A65FF),
                       shape: const BeveledRectangleBorder(),
@@ -474,28 +508,28 @@ class _LandingPageState extends State<LandingPage> {
                 ],
               ),
             ),
-            Responsive.isDesktop(context)?
-            Flexible(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.network(
-                    'https://placehold.co/1000x1000',
-                    fit: BoxFit.cover,
-                    width: width * 0.35, // Adjust as needed
-                    height: height * 0.25, // Adjust as needed
-                  ),
-                ),
-              ),
-            ): Container(),
+            Responsive.isDesktop(context)
+                ? Flexible(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.network(
+                          'https://placehold.co/1000x1000',
+                          fit: BoxFit.cover,
+                          width: width * 0.35, // Adjust as needed
+                          height: height * 0.25, // Adjust as needed
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
           ],
         ),
       ),
     );
   }
 }
-
 
 class TitleSubtitle extends StatelessWidget {
   final String title;
@@ -526,13 +560,12 @@ class CustomCard extends StatelessWidget {
   final IconData icon;
   const CustomCard(
       {super.key,
-        required this.title,
-        required this.subtitle,
-        required this.icon});
+      required this.title,
+      required this.subtitle,
+      required this.icon});
 
   @override
   Widget build(BuildContext context) {
-
     return AnimatedGradientBorder(
       borderSize: 0.2,
       glowSize: 10,
@@ -564,7 +597,7 @@ class CustomCard extends StatelessWidget {
                     const SizedBox(width: 10),
                     Text(title,
                         style:
-                        const TextStyle(color: Colors.black, fontSize: 20)),
+                            const TextStyle(color: Colors.black, fontSize: 20)),
                   ],
                 ),
                 const SizedBox(height: 8),

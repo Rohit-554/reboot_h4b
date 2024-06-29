@@ -289,7 +289,7 @@ class ChatPageState extends ConsumerState<ChatPage> {
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.4),
                           borderRadius: BorderRadius.circular(50),
-                          boxShadow: [
+                          boxShadow: const [
                             BoxShadow(
                               color: Colors.black12,
                               blurRadius: 4,
@@ -325,7 +325,7 @@ class ChatPageState extends ConsumerState<ChatPage> {
                             color: Color(0xFFD7FE62),
                             width: 2.0,
                           ),
-                          boxShadow: [
+                          boxShadow: const [
                             BoxShadow(
                               color: Colors.black12,
                               blurRadius: 4,
@@ -351,7 +351,7 @@ class ChatPageState extends ConsumerState<ChatPage> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(50),
                           color: Colors.white.withOpacity(0.4),
-                          boxShadow: [
+                          boxShadow: const [
                             BoxShadow(
                               color: Colors.black12,
                               blurRadius: 4,

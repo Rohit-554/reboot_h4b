@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,16 +10,17 @@ import 'package:tiktik_v/presentation/use_case/get_chat_use_case.dart';
 import 'package:tiktik_v/provider/StateProviders.dart';
 
 import '../injection_container.dart';
+import '../utils/responsive.dart';
 import 'mediator.dart';
 
 class ConnectionScreen extends ConsumerStatefulWidget {
   const ConnectionScreen({super.key});
 
   @override
-  _ConnectionScreenState createState() => _ConnectionScreenState();
+  ConnectionScreenState createState() => ConnectionScreenState();
 }
 
-class _ConnectionScreenState extends ConsumerState<ConnectionScreen> {
+class ConnectionScreenState extends ConsumerState<ConnectionScreen> {
   bool isLoading = false;
   TextEditingController host = TextEditingController(text: '');
   TextEditingController user = TextEditingController(text: '');
@@ -51,13 +53,14 @@ class _ConnectionScreenState extends ConsumerState<ConnectionScreen> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     bool isConnectedToLg = ref.watch(isDatabaseConnected);
-    double paddingValue = width * 0.2;
 
     return SafeArea(
       child: Scaffold(
+        extendBodyBehindAppBar: false,
         appBar: AppBar(
+          backgroundColor: Colors.transparent,
           title: Text(
-            'Settings',
+            'Connect to Database',
             style: GoogleFonts.roboto(
               textStyle: const TextStyle(
                 color: Colors.white,
@@ -67,58 +70,126 @@ class _ConnectionScreenState extends ConsumerState<ConnectionScreen> {
             ),
           ),
         ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              children: [
-                customInput(host, "Host"),
-                customInput(user, "User"),
-                customInput(password, "Password"),
-                customInput(dataBase, "Database"),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  child: SizedBox(
-                    height: 48,
-                    width: width,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: isConnectedToLg ? Colors.redAccent : Colors.green,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
+        body: Stack(
+          children: [
+            Container(
+              height: height,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/bgAnim.gif'),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            Container(
+              height: height,
+              color: Colors.black.withOpacity(0.7), // Adjust the opacity as needed
+            ),
+            Center(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: Responsive.isDesktop(context)
+                      ? EdgeInsets.symmetric(horizontal: width / 4)
+                      : const EdgeInsets.all(20),
+                  child: Container(
+                    height: Responsive.isDesktop(context) ? height / 2 : height,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: Colors.white.withOpacity(0.2),
+                        width: 0.5,
                       ),
-                      onPressed: () {
-                        updateProviders();
-                        if (isConnectedToLg) {
-                          _disconnectFromDatabase(ref);
-                        } else {
-                          setState(() {
-                            isLoading = true;
-                          });
-                          _connectToDatabase(ref, host.text, user.text, password.text, dataBase.text).then((_) {
-                            setState(() {
-                              isLoading = false;
-                            });
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => MediatorPage()),
-                            );
-                          });
-                        }
-                      },
-                      child: isLoading
-                          ? CircularProgressIndicator(color: Colors.white)
-                          : Text(
-                        isConnectedToLg ? "Disconnect" : "Connect To Database",
-                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: Colors.white.withOpacity(0.2),
+                              width: 1.5,
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  customInput(host, "Host"),
+                                  customInput(user, "User"),
+                                  customInput(password, "Password"),
+                                  customInput(dataBase, "Database"),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 10),
+                                    child: SizedBox(
+                                      height: 48,
+                                      width: width,
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: isConnectedToLg
+                                              ? Colors.redAccent
+                                              : Colors.green,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(5.0),
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          updateProviders();
+                                          if (isConnectedToLg) {
+                                            _disconnectFromDatabase(ref);
+                                          } else {
+                                            setState(() {
+                                              isLoading = true;
+                                            });
+                                            _connectToDatabase(
+                                                ref,
+                                                host.text,
+                                                user.text,
+                                                password.text,
+                                                dataBase.text)
+                                                .then((_) {
+                                              setState(() {
+                                                isLoading = false;
+                                              });
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) => const MediatorPage()),
+                                              );
+                                            });
+                                          }
+                                        },
+                                        child: isLoading
+                                            ? const CircularProgressIndicator(color: Colors.white)
+                                            : Text(
+                                          isConnectedToLg
+                                              ? "Disconnect"
+                                              : "Connect To Database",
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
@@ -129,12 +200,12 @@ class _ConnectionScreenState extends ConsumerState<ConnectionScreen> {
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: TextFormField(
         controller: controller,
-        style: TextStyle(color: Colors.white),
+        style: const TextStyle(color: Colors.white),
         decoration: InputDecoration(
           labelText: labelText,
-          labelStyle: TextStyle(color: Colors.white),
+          labelStyle: const TextStyle(color: Colors.white),
           filled: true,
-          fillColor: Color(0xFF2D2F3A),
+          fillColor: const Color(0xFF2D2F3A),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(5.0),
             borderSide: const BorderSide(color: Colors.white),
@@ -143,7 +214,8 @@ class _ConnectionScreenState extends ConsumerState<ConnectionScreen> {
             borderRadius: BorderRadius.circular(5.0),
             borderSide: const BorderSide(color: Colors.white),
           ),
-          contentPadding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
         ),
       ),
     );
@@ -158,7 +230,8 @@ class _ConnectionScreenState extends ConsumerState<ConnectionScreen> {
     super.dispose();
   }
 
-  Future<void> _connectToDatabase(WidgetRef ref, String host, String user, String password, String database) async {
+  Future<void> _connectToDatabase(WidgetRef ref, String host, String user,
+      String password, String database) async {
     final useCase = sl<ConnectToDatabaseUseCase>();
     final chatUseCase = sl<GetChatUseCase>();
 
@@ -218,8 +291,12 @@ class ControlButton extends StatelessWidget {
           icon: Icon(icon, size: 24),
           label: Text(label),
           style: ElevatedButton.styleFrom(
-            foregroundColor: isShutdown ? Colors.white : (isPrimary ? Colors.white : Colors.black),
-            backgroundColor: isShutdown ? Colors.red : (isPrimary ? Colors.blue : Colors.white),
+            foregroundColor: isShutdown
+                ? Colors.white
+                : (isPrimary ? Colors.white : Colors.black),
+            backgroundColor: isShutdown
+                ? Colors.red
+                : (isPrimary ? Colors.blue : Colors.white),
             textStyle: const TextStyle(fontSize: 16),
             padding: const EdgeInsets.all(10),
             shape: RoundedRectangleBorder(
