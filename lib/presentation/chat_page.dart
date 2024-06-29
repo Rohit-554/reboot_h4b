@@ -36,7 +36,7 @@ class ChatPageState extends ConsumerState<ChatPage> {
     if (_controller.text.isNotEmpty) {
       setState(() {
         _messages.add({
-          "role": "You", // Assuming "You" as the role for user messages
+          "role": "You",
           "text": _controller.text,
         });
         _controller.clear();
