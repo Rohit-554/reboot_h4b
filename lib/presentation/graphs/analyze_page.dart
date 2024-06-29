@@ -1,14 +1,14 @@
 import 'dart:convert';
-
 import 'package:decimal/decimal.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 
+Map<String, dynamic> convertStringToMap(String jsonString) {
+  return jsonDecode(jsonString);
+}
 
 class AnalyzePage extends StatefulWidget {
   final String dataPointsBundle;
-  /*final Map<String, dynamic> data;*/
 
   AnalyzePage({required this.dataPointsBundle});
 
@@ -17,10 +17,14 @@ class AnalyzePage extends StatefulWidget {
 }
 
 class _AnalyzePageState extends State<AnalyzePage> {
+  late Map<String, dynamic> data;
+
   @override
   void initState() {
     super.initState();
-    print("this is data bundle${convertStringToMap(widget.dataPointsBundle)}");
+   /* String correctedResponse = widget.dataPointsBundle.replaceAll("'", '"');*/
+    data = convertStringToMap(widget.dataPointsBundle);
+    print("This is data bundle: ${data}");
   }
 
   @override
@@ -32,28 +36,11 @@ class _AnalyzePageState extends State<AnalyzePage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: BarChartSample1(data: convertStringToMap(widget.dataPointsBundle)),
+        child: BarChartSample1(data: data),
       ),
     );
   }
 }
-
-Map<String, dynamic> convertStringToMap(String jsonString) {
-  // Parse the JSON string
-  Map<String, dynamic> originalData = jsonDecode(jsonString);
-
-  // Create a new map to store the converted data
-  Map<String, dynamic> convertedData = {};
-
-  // Iterate over the original data and populate the new map
-  originalData.forEach((key, value) {
-    convertedData[key] = value;
-  });
-
-  return convertedData;
-}
-
-
 
 class BarChartSample1 extends StatefulWidget {
   final Map<String, dynamic> data;
@@ -293,4 +280,3 @@ class BarChartSample1State extends State<BarChartSample1> {
     }
   }
 }
-

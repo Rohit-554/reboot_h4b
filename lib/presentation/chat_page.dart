@@ -59,6 +59,7 @@ class ChatPageState extends ConsumerState<ChatPage> {
         for (int i = 0; i < len; i++) {
           if(i==3){
             /*Map<String, dynamic> data = jsonDecode(chatResponse[i]);*/
+            print("3rd response is ${chatResponse[i]}");
               Navigator.push(context, MaterialPageRoute(builder: (context) =>  AnalyzePage(dataPointsBundle: chatResponse[i])));
           }
           _messages.add({
