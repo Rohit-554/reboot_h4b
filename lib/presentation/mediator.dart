@@ -59,7 +59,7 @@ class _MediatorPageState extends State<MediatorPage> with WidgetsBindingObserver
         ),
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/hero.png'),
             fit: BoxFit.cover,
@@ -67,7 +67,7 @@ class _MediatorPageState extends State<MediatorPage> with WidgetsBindingObserver
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16),
-          child: _sectionOne(context),
+          child: SingleChildScrollView(child: _sectionOne(context)),
         ),
       ),
     );
@@ -82,7 +82,7 @@ class _MediatorPageState extends State<MediatorPage> with WidgetsBindingObserver
           height: height * 0.5,
           width: double.infinity,
           decoration: BoxDecoration(
-            color: Color(0xFF212121),
+            color: const Color(0xFF212121),
             border: Border.all(color: Colors.white, width: 0.5),
 
             borderRadius: BorderRadius.circular(15),
@@ -93,7 +93,7 @@ class _MediatorPageState extends State<MediatorPage> with WidgetsBindingObserver
               child: Text(
                 "Welcome Sai",
                 style: GoogleFonts.hankenGrotesk(
-                  textStyle: TextStyle(
+                  textStyle: const TextStyle(
                     color: Colors.white,
                     fontSize: 40,
                     fontWeight: FontWeight.w800,
@@ -103,10 +103,10 @@ class _MediatorPageState extends State<MediatorPage> with WidgetsBindingObserver
             ),
           ),
         ),
-        SizedBox(height: 16), // Add space between sections
+        const SizedBox(height: 16), // Add space between sections
         SizedBox(
           width: width,
-          child: Row(
+          child: Responsive.isDesktop(context) ? Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               GestureDetector(
@@ -118,9 +118,9 @@ class _MediatorPageState extends State<MediatorPage> with WidgetsBindingObserver
                   width: width/1.89,
 
                   margin:
-                  EdgeInsets.symmetric(horizontal: 8.0), // Add space between containers
+                  const EdgeInsets.symmetric(horizontal: 8.0), // Add space between containers
                   decoration: BoxDecoration(
-                    color: Color(0xFF212121).withOpacity(0.2),
+                    color: const Color(0xFF212121).withOpacity(0.2),
                     borderRadius: BorderRadius.circular(15),
                     border: Border.all(color: Colors.white, width: 0.5),
                   ),
@@ -145,7 +145,7 @@ class _MediatorPageState extends State<MediatorPage> with WidgetsBindingObserver
                       Text(
                         "Visualize",
                         style: GoogleFonts.tomorrow(
-                          textStyle: TextStyle(
+                          textStyle: const TextStyle(
                             color: Colors.white,
                             fontSize: 24,
                             fontWeight: FontWeight.w800,
@@ -158,7 +158,7 @@ class _MediatorPageState extends State<MediatorPage> with WidgetsBindingObserver
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const ChatPage()));
                 },
                 child: _buildRoundedContainer(
                   height / 3,
@@ -177,7 +177,7 @@ class _MediatorPageState extends State<MediatorPage> with WidgetsBindingObserver
                         Text(
                           "Converse Now",
                           style: GoogleFonts.tomorrow(
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                               color: Colors.white,
                               fontSize: 24,
                               fontWeight: FontWeight.w800,
@@ -188,6 +188,94 @@ class _MediatorPageState extends State<MediatorPage> with WidgetsBindingObserver
                     ),
                   ),
                 ),
+              ),
+            ],
+          ):Column(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  // Define action for the first container
+                },
+                child: Container(
+                  height: height/3,
+                  width: width,
+
+                  margin:
+                  const EdgeInsets.symmetric(horizontal: 8.0), // Add space between containers
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF212121).withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(15),
+                    border: Border.all(color: Colors.white, width: 0.5),
+                  ),
+
+                ),
+              ),
+              SizedBox(height: 20,),
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      // Define action for the second container
+                    },
+                    child: _buildRoundedContainer(
+                      width / 2,
+                      width / 3,
+                      Colors.transparent,
+                      Column(
+                        children: [
+                          Lottie.asset(
+                            'assets/graph.json',
+                            repeat: true,
+                            height: 210,
+                          ),
+                          Text(
+                            "Visualize",
+                            style: GoogleFonts.tomorrow(
+                              textStyle: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const ChatPage()));
+                    },
+                    child: _buildRoundedContainer(
+                      width / 2,
+                      width /3,
+                      Colors.transparent,
+                      SizedBox(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Lottie.asset(
+                              'assets/orb.json',
+                              repeat: true,
+                              height: 210,
+                            ),
+                            Text(
+                              "Converse Now",
+                              style: GoogleFonts.tomorrow(
+                                textStyle: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -202,7 +290,7 @@ class _MediatorPageState extends State<MediatorPage> with WidgetsBindingObserver
       height: height,
       width: width,
       margin:
-      EdgeInsets.symmetric(horizontal: 8.0), // Add space between containers
+      const EdgeInsets.symmetric(horizontal: 8.0), // Add space between containers
       decoration: BoxDecoration(
         color: color.withOpacity(0.2),
         borderRadius: BorderRadius.circular(15),

@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -7,8 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tiktik_v/presentation/use_case/connect_to_database_use_case.dart';
 import 'package:tiktik_v/presentation/use_case/get_chat_use_case.dart';
 import 'package:tiktik_v/provider/StateProviders.dart';
-
 import '../injection_container.dart';
+import '../utils/responsive.dart';
 import 'mediator.dart';
 
 class ConnectionScreen extends ConsumerStatefulWidget {
@@ -51,13 +51,13 @@ class _ConnectionScreenState extends ConsumerState<ConnectionScreen> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     bool isConnectedToLg = ref.watch(isDatabaseConnected);
-    double paddingValue = width * 0.2;
 
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.transparent,
           title: Text(
-            'Settings',
+            'Connect to Database',
             style: GoogleFonts.roboto(
               textStyle: const TextStyle(
                 color: Colors.white,
@@ -67,58 +67,106 @@ class _ConnectionScreenState extends ConsumerState<ConnectionScreen> {
             ),
           ),
         ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              children: [
-                customInput(host, "Host"),
-                customInput(user, "User"),
-                customInput(password, "Password"),
-                customInput(dataBase, "Database"),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  child: SizedBox(
-                    height: 48,
-                    width: width,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: isConnectedToLg ? Colors.redAccent : Colors.green,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0),
+        body: Stack(
+          children: [
+            Container(
+              height: height,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/bgAnim.gif'),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            Container(
+              height: height,
+              color: Colors.black.withOpacity(0.7), // Adjust the opacity as needed
+            ),
+            Center(
+              child: Padding(
+                padding: Responsive.isDesktop(context) ? EdgeInsets.symmetric(horizontal: 100.0,vertical: 20):EdgeInsets.symmetric(horizontal: 20.0,vertical: 20),
+                child: Container(
+                  width: Responsive.isDesktop(context) ?600:400,
+                  margin: const EdgeInsets.all(5.0),
+                  padding: const EdgeInsets.all(5.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: Colors.white.withOpacity(0.2),
+                      width: 0.5,
+                    ),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: Colors.white.withOpacity(0.2),
+                            width: 0.5,
+                          ),
                         ),
-                      ),
-                      onPressed: () {
-                        updateProviders();
-                        if (isConnectedToLg) {
-                          _disconnectFromDatabase(ref);
-                        } else {
-                          setState(() {
-                            isLoading = true;
-                          });
-                          _connectToDatabase(ref, host.text, user.text, password.text, dataBase.text).then((_) {
-                            setState(() {
-                              isLoading = false;
-                            });
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => MediatorPage()),
-                            );
-                          });
-                        }
-                      },
-                      child: isLoading
-                          ? CircularProgressIndicator(color: Colors.white)
-                          : Text(
-                        isConnectedToLg ? "Disconnect" : "Connect To Database",
-                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            customInput(host, "Host"),
+                            customInput(user, "User"),
+                            customInput(password, "Password"),
+                            customInput(dataBase, "Database"),
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 10),
+                              child: SizedBox(
+                                height: 48,
+                                width: width * 0.6,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: isConnectedToLg ? Colors.redAccent : Colors.green,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5.0),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    updateProviders();
+                                    if (isConnectedToLg) {
+                                      _disconnectFromDatabase(ref);
+                                    } else {
+                                      setState(() {
+                                        isLoading = true;
+                                      });
+                                      _connectToDatabase(ref, host.text, user.text, password.text, dataBase.text).then((_) {
+                                        setState(() {
+                                          isLoading = false;
+                                        });
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => MediatorPage()),
+                                        );
+                                      });
+                                    }
+                                  },
+                                  child: isLoading
+                                      ? CircularProgressIndicator(color: Colors.white)
+                                      : Text(
+                                    isConnectedToLg ? "Disconnect" : "Connect To Database",
+                                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
