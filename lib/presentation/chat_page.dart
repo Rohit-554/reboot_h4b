@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:tiktik_v/presentation/settingsPage.dart';
+import 'package:tiktik_v/provider/StateProviders.dart';
 
 class ChatPage extends ConsumerStatefulWidget {
   const ChatPage({Key? key}) : super(key: key);
@@ -13,6 +14,11 @@ class ChatPage extends ConsumerStatefulWidget {
 
 class ChatPageState extends ConsumerState<ChatPage> {
 
+  @override
+  void initState() {
+    super.initState();
+    print("ChatId data ${ref.read(chatIdProvider)}");
+  }
   final List<Map<String, String>> _messages = []; // List to hold message maps
   final TextEditingController _controller = TextEditingController();
   List<bool> isSelected = [true, false];

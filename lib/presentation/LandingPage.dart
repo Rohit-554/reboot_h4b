@@ -162,10 +162,6 @@ class _LandingPageState extends State<LandingPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        CustomButton(
-          title: "Try Now",
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage()));
         GestureDetector(
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage()));

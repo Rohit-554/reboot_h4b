@@ -10,7 +10,7 @@ class ApiResponse<T> {
 }
 
 class ApiService {
-  static const String baseUrl = 'http://13.201.224.184'; // Base URL
+  static const String baseUrl = 'http://13.201.224.184';
   static const String connectUrl = '$baseUrl/connect_old';
   static const String chatUrl = '$baseUrl/generate_response';
   static const String closeConnectionUrl = '$baseUrl/close_connection';

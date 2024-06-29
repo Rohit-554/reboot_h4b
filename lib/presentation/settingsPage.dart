@@ -164,8 +164,11 @@ void _connectToDatabase(WidgetRef ref, String host, String user, String password
       database: database,
     );
     print("Response${response.data}");
-    ref.read(isDatabaseConnected.notifier).state = true;
-    ref.read(ChatId.notifier).state = response.data!;
+    if(response.data!.isNotEmpty){
+      print("ChatId${response.data}");
+      ref.read(chatIdProvider.notifier).state = response.data!;
+      ref.read(isDatabaseConnected.notifier).state = true;
+    }
     // var chatResponse = await chatUseCase.execute(chatId: response.data!, query: "Which is the best performing product in terms of revenue?");
     // print("Chatresponse${chatResponse.data}");
   }catch(e){
