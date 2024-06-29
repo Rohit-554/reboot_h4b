@@ -23,6 +23,7 @@ class _AnalyzePageState extends State<AnalyzePage> {
   void initState() {
     super.initState();
    /* String correctedResponse = widget.dataPointsBundle.replaceAll("'", '"');*/
+    print("This is again data ${widget.dataPointsBundle}");
     data = convertStringToMap(widget.dataPointsBundle);
     print("This is data bundle: ${data}");
   }
@@ -62,6 +63,9 @@ class BarChartSample1State extends State<BarChartSample1> {
     List<double> revenues = widget.data.values
         .map((item) => Decimal.parse(item['total_revenue'].toString()).toDouble())
         .toList();
+    List<double> sales = widget.data.values
+        .map((item) => Decimal.parse(item['sale'].toString()).toDouble())
+        .toList();
 
     return AspectRatio(
       aspectRatio: 1,
@@ -78,18 +82,19 @@ class BarChartSample1State extends State<BarChartSample1> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Total Revenue',
+                  'Total Revenue and Sales',
                   style: TextStyle(fontSize: 18, color: Colors.grey),
                 ),
                 const SizedBox(height: 38),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: BarChart(
-                      isPlaying ? randomData() : mainBarData(productNames, revenues),
-                      swapAnimationDuration: animDuration,
+                Row(
+                  children: [
+                    Expanded(
+                      child: buildBarChart(productNames, revenues, 'Total Revenue'),
                     ),
-                  ),
+                    Expanded(
+                      child: buildBarChart(productNames, sales, 'Sales'),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 12),
               ],
@@ -114,9 +119,27 @@ class BarChartSample1State extends State<BarChartSample1> {
                 },
               ),
             ),
-          )
+          ),
         ],
       ),
+    );
+  }
+
+  Widget buildBarChart(List<String> productNames, List<double> data, String title) {
+    return Column(
+      children: [
+        Text(
+          title,
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(
+          height: 200, // Specify a height for the BarChart
+          child: BarChart(
+            isPlaying ? randomData() : mainBarData(productNames, data),
+            swapAnimationDuration: animDuration,
+          ),
+        ),
+      ],
     );
   }
 
@@ -149,12 +172,12 @@ class BarChartSample1State extends State<BarChartSample1> {
     );
   }
 
-  List<BarChartGroupData> showingGroups(List<double> revenues) =>
-      List.generate(revenues.length, (i) {
-        return makeGroupData(i, revenues[i], isTouched: i == touchedIndex);
+  List<BarChartGroupData> showingGroups(List<double> data) =>
+      List.generate(data.length, (i) {
+        return makeGroupData(i, data[i], isTouched: i == touchedIndex);
       });
 
-  BarChartData mainBarData(List<String> productNames, List<double> revenues) {
+  BarChartData mainBarData(List<String> productNames, List<double> data) {
     return BarChartData(
       barTouchData: BarTouchData(
         touchTooltipData: BarTouchTooltipData(
@@ -221,7 +244,7 @@ class BarChartSample1State extends State<BarChartSample1> {
       borderData: FlBorderData(
         show: false,
       ),
-      barGroups: showingGroups(revenues),
+      barGroups: showingGroups(data),
       gridData: const FlGridData(show: false),
     );
   }
@@ -280,3 +303,4 @@ class BarChartSample1State extends State<BarChartSample1> {
     }
   }
 }
+
