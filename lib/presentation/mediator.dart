@@ -38,21 +38,21 @@ class _MediatorPageState extends State<MediatorPage> with WidgetsBindingObserver
   Widget build(BuildContext context) {
     if (!mounted) return Container();
 
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
+    final double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       extendBodyBehindAppBar: false,
       backgroundColor: const Color(0xff181818),
       appBar: AppBar(
-        centerTitle:  Responsive.isDesktop(context)? false:true,
-
+        centerTitle: Responsive.isDesktop(context) ? false : true,
         backgroundColor: Colors.transparent,
         title: Text(
           "Converse With",
           style: GoogleFonts.tomorrow(
             textStyle: TextStyle(
               color: Colors.white,
-              fontSize:Responsive.isDesktop(context)?32: 24,
+              fontSize: Responsive.isDesktop(context) ? 32 : 24,
               fontWeight: FontWeight.w800,
             ),
           ),
@@ -67,242 +67,117 @@ class _MediatorPageState extends State<MediatorPage> with WidgetsBindingObserver
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16),
-          child: SingleChildScrollView(child: _sectionOne(context)),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                _buildWelcomeSection(height),
+                const SizedBox(height: 16),
+                _buildContentSections(context, height, width),
+              ],
+            ),
+          ),
         ),
       ),
     );
   }
 
-  Widget _sectionOne(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
-    return Column(
-      children: [
-        Container(
-          height: height * 0.5,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: const Color(0xFF212121),
-            border: Border.all(color: Colors.white, width: 0.5),
-
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 28.0),
-              child: Text(
-                "Welcome Sai",
-                style: GoogleFonts.hankenGrotesk(
-                  textStyle: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 40,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
+  Widget _buildWelcomeSection(double height) {
+    return Container(
+      height: height * 0.5,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: const Color(0xFF212121),
+        border: Border.all(color: Colors.white, width: 0.5),
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 28.0),
+          child: Text(
+            "Welcome Sai",
+            style: GoogleFonts.hankenGrotesk(
+              textStyle: const TextStyle(
+                color: Colors.white,
+                fontSize: 40,
+                fontWeight: FontWeight.w800,
               ),
             ),
           ),
         ),
-        const SizedBox(height: 16), // Add space between sections
-        SizedBox(
-          width: width,
-          child: Responsive.isDesktop(context) ? Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  // Define action for the first container
-                },
-                child: Container(
-                  height: height/3,
-                  width: width/1.89,
+      ),
+    );
+  }
 
-                  margin:
-                  const EdgeInsets.symmetric(horizontal: 8.0), // Add space between containers
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF212121).withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(15),
-                    border: Border.all(color: Colors.white, width: 0.5),
-                  ),
+  Widget _buildContentSections(BuildContext context, double height, double width) {
+    if (Responsive.isDesktop(context)) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          _buildActionContainer(height / 3, width / 2.2, Colors.transparent, const SizedBox.shrink(), () {}),
+          _buildActionContainer(height / 3, width / 5.1, Colors.transparent, _buildLottieContent('assets/graph.json', 'Visualize'), () {}),
+          _buildActionContainer(height / 3, width / 5.1, Colors.transparent, _buildLottieContent('assets/orb.json', 'Converse Now'), () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const ChatPage()));
+          }),
+        ],
+      );
+    } else {
+      return Column(
+        children: [
+          _buildActionContainer(height / 3, width, Colors.transparent, const SizedBox.shrink(), () {}),
+          const SizedBox(height: 20),
+          _buildActionContainer(height / 3, width, Colors.transparent, _buildLottieContent('assets/graph.json', 'Visualize'), () {}),
+          const SizedBox(height: 20),
+          _buildActionContainer(height / 3, width, Colors.transparent, _buildLottieContent('assets/orb.json', 'Converse Now'), () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const ChatPage()));
+          }),
+        ],
+      );
+    }
+  }
 
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  // Define action for the second container
-                },
-                child: _buildRoundedContainer(
-                  height / 3,
-                  width / 5.1,
-                  Colors.transparent,
-                  Column(
-                    children: [
-                      Lottie.asset(
-                        'assets/graph.json',
-                        repeat: true,
-                        height: 210,
-                      ),
-                      Text(
-                        "Visualize",
-                        style: GoogleFonts.tomorrow(
-                          textStyle: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const ChatPage()));
-                },
-                child: _buildRoundedContainer(
-                  height / 3,
-                  width / 5.1,
-                  Colors.transparent,
-                  SizedBox(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Lottie.asset(
-                          'assets/orb.json',
-                          repeat: true,
-                          height: 210,
-                        ),
-                        Text(
-                          "Converse Now",
-                          style: GoogleFonts.tomorrow(
-                            textStyle: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ):Column(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  // Define action for the first container
-                },
-                child: Container(
-                  height: height/3,
-                  width: width,
-
-                  margin:
-                  const EdgeInsets.symmetric(horizontal: 8.0), // Add space between containers
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF212121).withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(15),
-                    border: Border.all(color: Colors.white, width: 0.5),
-                  ),
-
-                ),
-              ),
-              SizedBox(height: 20,),
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      // Define action for the second container
-                    },
-                    child: _buildRoundedContainer(
-                      width / 2,
-                      width / 3,
-                      Colors.transparent,
-                      Column(
-                        children: [
-                          Lottie.asset(
-                            'assets/graph.json',
-                            repeat: true,
-                            height: 210,
-                          ),
-                          Text(
-                            "Visualize",
-                            style: GoogleFonts.tomorrow(
-                              textStyle: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 24,
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const ChatPage()));
-                    },
-                    child: _buildRoundedContainer(
-                      width / 2,
-                      width /3,
-                      Colors.transparent,
-                      SizedBox(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Lottie.asset(
-                              'assets/orb.json',
-                              repeat: true,
-                              height: 210,
-                            ),
-                            Text(
-                              "Converse Now",
-                              style: GoogleFonts.tomorrow(
-                                textStyle: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w800,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+  Widget _buildLottieContent(String assetPath, String label) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Lottie.asset(
+          assetPath,
+          repeat: true,
+          height: 210,
+        ),
+        Text(
+          label,
+          style: GoogleFonts.tomorrow(
+            textStyle: const TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.w800,
+            ),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildRoundedContainer(double height, double width, Color color,
-      [Widget? child]) {
-    return Container(
-      height: height,
-      width: width,
-      margin:
-      const EdgeInsets.symmetric(horizontal: 8.0), // Add space between containers
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: Colors.white, width: 0.5),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(15),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-          child: Container(
-            color: color.withOpacity(0.2),
-            child: child,
+  Widget _buildActionContainer(double height, double width, Color color, Widget child, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: height,
+        width: width,
+        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(color: Colors.white, width: 0.5),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(15),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+            child: Container(
+              color: color.withOpacity(0.2),
+              child: child,
+            ),
           ),
         ),
       ),
