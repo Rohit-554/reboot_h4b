@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,6 +8,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:lottie/lottie.dart';
 import 'package:tiktik_v/api_service/ApiService.dart';
 import 'package:tiktik_v/data/model/Chat_response_model.dart';
+import 'package:tiktik_v/presentation/graphs/analyze_page.dart';
 import 'package:tiktik_v/presentation/settingsPage.dart';
 import 'package:tiktik_v/presentation/use_case/get_chat_use_case.dart';
 import 'package:tiktik_v/provider/StateProviders.dart';
@@ -49,11 +52,15 @@ class ChatPageState extends ConsumerState<ChatPage> {
     final chatUseCase = sl<GetChatUseCase>();
     var chatResponse = await chatUseCase.execute(
         chatId: ref.read(chatIdProvider), query: query);
-    print("chatREsponse ${chatResponse}");
+    print("chatResponse ${chatResponse}");
     if (chatResponse != null) {
       var len = chatResponse.length;
       setState(() {
         for (int i = 0; i < len; i++) {
+          if(i==3){
+            /*Map<String, dynamic> data = jsonDecode(chatResponse[i]);*/
+              Navigator.push(context, MaterialPageRoute(builder: (context) =>  AnalyzePage(dataPointsBundle: chatResponse[i])));
+          }
           _messages.add({
             "role": "Bot",
             "text": chatResponse[i] ?? "Error: No response",
