@@ -14,7 +14,8 @@ class MediatorPage extends StatefulWidget {
   State<MediatorPage> createState() => _MediatorPageState();
 }
 
-class _MediatorPageState extends State<MediatorPage> with WidgetsBindingObserver {
+class _MediatorPageState extends State<MediatorPage>
+    with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
@@ -31,6 +32,17 @@ class _MediatorPageState extends State<MediatorPage> with WidgetsBindingObserver
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.inactive) {
       // Handle app lifecycle state changes if needed
+    }
+  }
+
+  String _getGreeting() {
+    final hour = DateTime.now().hour;
+    if (hour < 12) {
+      return 'Good Morning';
+    } else if (hour < 18) {
+      return 'Good Afternoon';
+    } else {
+      return 'Good Evening';
     }
   }
 
@@ -93,42 +105,175 @@ class _MediatorPageState extends State<MediatorPage> with WidgetsBindingObserver
       child: Center(
         child: Padding(
           padding: const EdgeInsets.only(top: 28.0),
-          child: Text(
-            "Welcome Sai",
-            style: GoogleFonts.hankenGrotesk(
-              textStyle: const TextStyle(
-                color: Colors.white,
-                fontSize: 40,
-                fontWeight: FontWeight.w800,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                _getGreeting(),
+                style: GoogleFonts.hankenGrotesk(
+                  textStyle: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 40,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
               ),
-            ),
+              const SizedBox(height: 20),
+              Responsive.isDesktop(context)
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+
+                        Container(
+                            decoration: BoxDecoration(
+                                color: Colors.blue,
+                                borderRadius: BorderRadius.circular(15)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'Current Sales: 38824',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            )),
+                        const SizedBox(width: 20),
+                        Container(
+                            decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(15)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'Stocks of socks depleceting',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            )),
+                        const SizedBox(width: 20),
+                        Container(
+                            decoration: BoxDecoration(
+                                color: Colors.green,
+                                borderRadius: BorderRadius.circular(15)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'Customers are loving your products!',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            )),
+                      ],
+                    )
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+
+                        Container(
+                            decoration: BoxDecoration(
+                                color: Colors.blue,
+                                borderRadius: BorderRadius.circular(15)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'Current Sales: 38824',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            )),
+                        const SizedBox(height: 20),
+                        Container(
+                            decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(15)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'Stocks of socks depleceting',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            )),
+                        const SizedBox(height: 20),
+                        Container(
+                            decoration: BoxDecoration(
+                                color: Colors.green,
+                                borderRadius: BorderRadius.circular(15)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'Customers are loving your products!',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            )),
+                      ],
+                    ),
+            ],
           ),
         ),
       ),
     );
   }
 
-  Widget _buildContentSections(BuildContext context, double height, double width) {
+  Widget _buildContentSections(
+      BuildContext context, double height, double width) {
     if (Responsive.isDesktop(context)) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _buildActionContainer(height / 3, width / 2.2, Colors.transparent, const SizedBox.shrink(), () {}),
-          _buildActionContainer(height / 3, width / 5.1, Colors.transparent, _buildLottieContent('assets/graph.json', 'Visualize'), () {}),
-          _buildActionContainer(height / 3, width / 5.1, Colors.transparent, _buildLottieContent('assets/orb.json', 'Converse Now'), () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const ChatPage()));
+          _buildActionContainer(
+              height / 3,
+              width / 2.2,
+              Colors.transparent,
+              _buildLottieContent('assets/dino.json', 'Switch to Offline'),
+              () {}),
+          _buildActionContainer(height / 3, width / 5.1, Colors.transparent,
+              _buildLottieContent('assets/graph.json', 'Visualize'), () {}),
+          _buildActionContainer(height / 3, width / 5.1, Colors.transparent,
+              _buildLottieContent('assets/orb.json', 'Converse Now'), () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const ChatPage()));
           }),
         ],
       );
     } else {
       return Column(
         children: [
-          _buildActionContainer(height / 3, width, Colors.transparent, const SizedBox.shrink(), () {}),
+          _buildActionContainer(
+              height / 3,
+              width,
+              Colors.transparent,
+              _buildLottieContent('assets/dino.json', 'Switch to Offline'),
+              () {}),
           const SizedBox(height: 20),
-          _buildActionContainer(height / 3, width, Colors.transparent, _buildLottieContent('assets/graph.json', 'Visualize'), () {}),
+          _buildActionContainer(height / 3, width, Colors.transparent,
+              _buildLottieContent('assets/graph.json', 'Visualize'), () {}),
           const SizedBox(height: 20),
-          _buildActionContainer(height / 3, width, Colors.transparent, _buildLottieContent('assets/orb.json', 'Converse Now'), () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const ChatPage()));
+          _buildActionContainer(height / 3, width, Colors.transparent,
+              _buildLottieContent('assets/orb.json', 'Converse Now'), () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const ChatPage()));
           }),
         ],
       );
@@ -158,7 +303,8 @@ class _MediatorPageState extends State<MediatorPage> with WidgetsBindingObserver
     );
   }
 
-  Widget _buildActionContainer(double height, double width, Color color, Widget child, VoidCallback onTap) {
+  Widget _buildActionContainer(double height, double width, Color color,
+      Widget child, VoidCallback onTap) {
     return GestureDetector(
       onTap: onTap,
       child: Container(

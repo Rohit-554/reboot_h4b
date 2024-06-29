@@ -5,7 +5,6 @@ import 'package:lottie/lottie.dart';
 import 'package:tiktik_v/presentation/settingsPage.dart';
 import '../utils/responsive.dart';
 
-
 class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
 
@@ -147,8 +146,10 @@ class _LandingPageState extends State<LandingPage> {
       children: [
         GestureDetector(
           onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const ConnectionScreen()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const ConnectionScreen()));
           },
           child: Container(
             width: 210,
@@ -196,9 +197,13 @@ class _LandingPageState extends State<LandingPage> {
       child: Responsive.isDesktop(context)
           ? Column(
               children: <Widget>[
-                const TitleSubtitle(
-                    title: "Features",
-                    subtitle: "Heuheuheu This is a feature subtitle"),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 100.0),
+                  child: const TitleSubtitle(
+                      title: "Features",
+                      subtitle:
+                          "Enhancing user experience with real-time conversational data analysis, offline access, and brilliant visuals. These features streamline database operations, support better decision-making, and ensure a user-friendly approach to data management and visualization."),
+                ),
                 const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -207,27 +212,32 @@ class _LandingPageState extends State<LandingPage> {
                         height: height * 0.5,
                         color: Colors.transparent,
                         child: Image.asset(
-                          'assets/hero.png',
+                          'assets/Thumbnail.png',
                           fit: BoxFit.cover,
                         )),
                     Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         featureItem(
-                          title: "Feature 1",
-                          subtitle: "This is a feature subtitle",
-                          icon: Icons.restaurant,
+                          title: "Intuitive Interface: ",
+                          subtitle:
+                              "User-friendly design for easy navigation and interaction with database tasks",
+                          icon: Icons.invert_colors_on_outlined,
                         ),
                         const SizedBox(height: 20),
                         featureItem(
-                          title: "Feature 2",
-                          subtitle: "This is a feature subtitle",
-                          icon: Icons.ac_unit,
+                          title: "Real-Time Conversational Data Analysis:",
+                          subtitle:
+                              "Provides instant insights and feedback through real-time data processing and analysis.",
+                          icon: Icons.mic,
                         ),
                         const SizedBox(height: 20),
                         featureItem(
-                          title: "Feature 3",
-                          subtitle: "This is a feature subtitle",
-                          icon: Icons.face_unlock_outlined,
+                          title: "Offline Access:",
+                          subtitle:
+                              "Allows users to manage and visualize data even without an internet connection.",
+                          icon: Icons.network_check_rounded,
                         ),
                       ],
                     ),
@@ -241,7 +251,8 @@ class _LandingPageState extends State<LandingPage> {
               children: <Widget>[
                 const TitleSubtitle(
                     title: "Features",
-                    subtitle: "Heuheuheu This is a feature subtitle"),
+                    subtitle:
+                        "Enhancing user experience with real-time conversational data analysis, offline access, and brilliant visuals. These features streamline database operations, support better decision-making, and ensure a user-friendly approach to data management and visualization."),
                 const SizedBox(height: 20),
                 Center(
                   child: Column(
@@ -253,7 +264,7 @@ class _LandingPageState extends State<LandingPage> {
                             height: height * 0.5,
                             color: Colors.transparent,
                             child: Image.asset(
-                              'assets/hero.png',
+                              'assets/Thumbnail.png',
                               fit: BoxFit.cover,
                             )),
                       ),
@@ -263,21 +274,25 @@ class _LandingPageState extends State<LandingPage> {
                           child: Column(
                             children: [
                               featureItem(
-                                title: "Feature 1",
-                                subtitle: "This is a feature subtitle",
-                                icon: Icons.restaurant,
+                                title: "Intuitive Interface: ",
+                                subtitle:
+                                    "User-friendly design for easy navigation and interaction with database tasks",
+                                icon: Icons.invert_colors_on_outlined,
                               ),
                               const SizedBox(height: 20),
                               featureItem(
-                                title: "Feature 2",
-                                subtitle: "This is a feature subtitle",
-                                icon: Icons.ac_unit,
+                                title:
+                                    "Real-Time Conversational Data Analysis:",
+                                subtitle:
+                                    "Provides instant insights and feedback through real-time data processing and analysis.",
+                                icon: Icons.mic,
                               ),
                               const SizedBox(height: 20),
                               featureItem(
-                                title: "Feature 3",
-                                subtitle: "This is a feature subtitle",
-                                icon: Icons.face_unlock_outlined,
+                                title: "Offline Access:",
+                                subtitle:
+                                    "Allows users to manage and visualize data even without an internet connection.",
+                                icon: Icons.network_check_rounded,
                               ),
                             ],
                           ),
@@ -328,13 +343,13 @@ class _LandingPageState extends State<LandingPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   CustomCard(
-                      title: "Work",
-                      subtitle: "This is a blablabla",
-                      icon: Icons.work),
+                      title: "Online",
+                      subtitle: "In online mode interaction, visualization, and faster response are more supported.",
+                      icon: Icons.network_check_rounded),
                   CustomCard(
-                      title: "Work",
-                      subtitle: "This is a blablabla",
-                      icon: Icons.work),
+                      title: "Offline",
+                      subtitle: "In offline mode, interaction is slower and less accurate but significantly more secure.",
+                      icon: Icons.lock),
                 ],
               )
             ])
@@ -478,7 +493,7 @@ class _LandingPageState extends State<LandingPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "OpenType feature\nand Variable fonts",
+                    "Boring Tasks\ndone easily and efficiently",
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: Responsive.isDesktop(context) ? 36 : 20),
@@ -509,18 +524,25 @@ class _LandingPageState extends State<LandingPage> {
               ),
             ),
             Responsive.isDesktop(context)
-                ? Flexible(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.network(
-                          'https://placehold.co/1000x1000',
-                          fit: BoxFit.cover,
-                          width: width * 0.35, // Adjust as needed
-                          height: height * 0.25, // Adjust as needed
+                ? SizedBox(
+                    height: 410,
+                    child: Row(
+                      children: [
+                        Lottie.asset(
+                          'assets/orb.json',
+                          repeat: true,
                         ),
-                      ),
+                        Text(
+                          "Converse With",
+                          style: GoogleFonts.tomorrow(
+                            textStyle: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 32,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   )
                 : Container(),
