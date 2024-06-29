@@ -9,7 +9,7 @@ import 'package:tiktik_v/presentation/use_case/get_chat_use_case.dart';
 import 'package:tiktik_v/provider/StateProviders.dart';
 
 import '../injection_container.dart';
-
+import 'mediator.dart';
 
 class ConnectionScreen extends ConsumerStatefulWidget {
   const ConnectionScreen({super.key});
@@ -24,7 +24,14 @@ class _ConnectionScreenState extends ConsumerState<ConnectionScreen> {
   TextEditingController user = TextEditingController(text: '');
   TextEditingController password = TextEditingController(text: '');
   TextEditingController dataBase = TextEditingController(text: '');
-  initTextControllers() async {
+
+  @override
+  void initState() {
+    super.initState();
+    initTextControllers();
+  }
+
+  Future<void> initTextControllers() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     host.text = ref.read(hostProvider);
     user.text = ref.read(userProvider);
@@ -32,18 +39,11 @@ class _ConnectionScreenState extends ConsumerState<ConnectionScreen> {
     dataBase.text = ref.read(databaseProvider).toString();
   }
 
-
-  updateProviders() {
+  void updateProviders() {
     ref.read(hostProvider.notifier).state = host.text;
     ref.read(userProvider.notifier).state = user.text;
     ref.read(passwordProvider.notifier).state = password.text;
     ref.read(databaseProvider.notifier).state = dataBase.text;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    initTextControllers();
   }
 
   @override
@@ -52,6 +52,7 @@ class _ConnectionScreenState extends ConsumerState<ConnectionScreen> {
     double height = MediaQuery.of(context).size.height;
     bool isConnectedToLg = ref.watch(isDatabaseConnected);
     double paddingValue = width * 0.2;
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -68,43 +69,53 @@ class _ConnectionScreenState extends ConsumerState<ConnectionScreen> {
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(40),
+            padding: const EdgeInsets.all(20),
             child: Column(
               children: [
                 customInput(host, "Host"),
                 customInput(user, "User"),
                 customInput(password, "Password"),
                 customInput(dataBase, "Database"),
-                /*customInput(chatUserNameController, "Enter your name"),*/
                 Padding(
-                  padding:  EdgeInsets.only(left: paddingValue, right: paddingValue, top: 10, bottom: 10),
+                  padding: EdgeInsets.symmetric(vertical: 10),
                   child: SizedBox(
                     height: 48,
                     width: width,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: ref.read(isDatabaseConnected) ? Colors.redAccent : Colors.green,
+                        backgroundColor: isConnectedToLg ? Colors.redAccent : Colors.green,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5.0),
                         ),
                       ),
                       onPressed: () {
                         updateProviders();
-                        if (!ref.read(isDatabaseConnected)) {
+                        if (isConnectedToLg) {
+                          _disconnectFromDatabase(ref);
+                        } else {
                           setState(() {
                             isLoading = true;
                           });
-                          _connectToDatabase(ref,host.text,user.text,password.text,dataBase.text);
+                          _connectToDatabase(ref, host.text, user.text, password.text, dataBase.text).then((_) {
+                            setState(() {
+                              isLoading = false;
+                            });
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => MediatorPage()),
+                            );
+                          });
                         }
                       },
-                      child: const Text(
-                        "Connect To Database",
-                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                      child: isLoading
+                          ? CircularProgressIndicator(color: Colors.white)
+                          : Text(
+                        isConnectedToLg ? "Disconnect" : "Connect To Database",
+                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
                 ),
-
               ],
             ),
           ),
@@ -114,14 +125,11 @@ class _ConnectionScreenState extends ConsumerState<ConnectionScreen> {
   }
 
   Widget customInput(TextEditingController controller, String labelText) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    double paddingValue = width * 0.2;
     return Padding(
-      padding:  EdgeInsets.only(left: paddingValue, right: paddingValue, top: 10, bottom: 10),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: TextFormField(
         controller: controller,
-        style: TextStyle(color: Colors.white), // Text color
+        style: TextStyle(color: Colors.white),
         decoration: InputDecoration(
           labelText: labelText,
           labelStyle: TextStyle(color: Colors.white),
@@ -149,33 +157,34 @@ class _ConnectionScreenState extends ConsumerState<ConnectionScreen> {
     dataBase.dispose();
     super.dispose();
   }
-}
 
-void _connectToDatabase(WidgetRef ref, String host, String user, String password, String database) async{
+  Future<void> _connectToDatabase(WidgetRef ref, String host, String user, String password, String database) async {
+    final useCase = sl<ConnectToDatabaseUseCase>();
+    final chatUseCase = sl<GetChatUseCase>();
 
-  final useCase = sl<ConnectToDatabaseUseCase>();
-  final chatUseCase = sl<GetChatUseCase>();
-
-  try {
-    var response = await useCase.execute(
-      host: host,
-      user: user,
-      password: password,
-      database: database,
-    );
-    print("Response${response.data}");
-    if(response.data!.isNotEmpty){
-      print("ChatId${response.data}");
-      ref.read(chatIdProvider.notifier).state = response.data!;
-      ref.read(isDatabaseConnected.notifier).state = true;
+    try {
+      var response = await useCase.execute(
+        host: host,
+        user: user,
+        password: password,
+        database: database,
+      );
+      print("Response${response.data}");
+      if (response.data!.isNotEmpty) {
+        print("ChatId${response.data}");
+        ref.read(chatIdProvider.notifier).state = response.data!;
+        ref.read(isDatabaseConnected.notifier).state = true;
+      }
+    } catch (e) {
+      print(e);
     }
-    // var chatResponse = await chatUseCase.execute(chatId: response.data!, query: "Which is the best performing product in terms of revenue?");
-    // print("Chatresponse${chatResponse.data}");
-  }catch(e){
-    print(e);
+  }
+
+  void _disconnectFromDatabase(WidgetRef ref) {
+    ref.read(chatIdProvider.notifier).state = '';
+    ref.read(isDatabaseConnected.notifier).state = false;
   }
 }
-
 
 class ControlButton extends StatelessWidget {
   final IconData icon;

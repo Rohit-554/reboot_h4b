@@ -36,7 +36,7 @@ class _MyAppState extends State<MyApp> {
           appBarTheme: appBarTheme(),
           useMaterial3: true,
         ),
-        home: const MediatorPage()
+        home: const LandingPage()
     );
   }
 }
