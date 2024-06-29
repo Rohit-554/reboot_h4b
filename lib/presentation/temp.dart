@@ -28,11 +28,27 @@ class CustomMarkdownTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const markdownData = """
-| Column 1 | Column 2 | Column 3 |
-|----------|----------|----------|
-|   Row 1  |   Row 1  |   Row 1  |
-|   Row 2  |   Row 2  |   Row 2  |
-|   Row 3  |   Row 3  |   Row 3  |
+{code: 
+sql
+SELECT 
+    p.product_id,
+    p.product_name,
+    SUM(oi.order_item_quantity * oi.order_item_product_price) AS total_revenue
+FROM 
+    products p
+JOIN 
+    order_items oi ON p.product_id = oi.order_item_product_id
+GROUP BY 
+    p.product_id, p.product_name
+ORDER BY 
+    total_revenue DESC
+LIMIT 1;
+, message: Based on the query result provided, it appears that the product with product_id 1004, named "Field & Stream Sportsman 16 Gun Fire Safe," generated a total revenue of 6929653.690338135 units. Therefore, based on this result, the product "Field & Stream Sportsman 16 Gun Fire Safe" is the best performing product in terms of revenue.
+, table: 
+| product_id | product_name | total_revenue |
+| --- | --- | --- |
+| 1004 | Field & Stream Sportsman 16 Gun Fire Safe | 6929653.690338135|
+}
 """;
 
     return Markdown(

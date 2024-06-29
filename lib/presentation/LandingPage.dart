@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:glowy_borders/glowy_borders.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:tiktik_v/presentation/settingsPage.dart';
 import 'package:tiktik_v/presentation/use_case/connect_to_database_use_case.dart';
 import 'package:tiktik_v/presentation/use_case/get_chat_use_case.dart';
 
 import '../injection_container.dart';
 import '../utils/responsive.dart';
 import 'chat_page.dart';
+import 'mediator.dart';
 
 
 
@@ -34,7 +36,7 @@ class _LandingPageState extends State<LandingPage> {
       backgroundColor: const Color(0xff181818),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        // centerTitle: true,
+        centerTitle: Responsive.isDesktop(context)? false:true,
         title: Text(
           "Converse With",
           style: GoogleFonts.tomorrow(
@@ -46,7 +48,7 @@ class _LandingPageState extends State<LandingPage> {
           ),
         ),
         actions: [
-          ElevatedButton(
+          Responsive.isDesktop(context)?  ElevatedButton(
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.white, backgroundColor: Colors.transparent,
               padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
@@ -56,7 +58,7 @@ class _LandingPageState extends State<LandingPage> {
               ),
             ),
             onPressed: () {
-              // Define the action when the button is pressed
+              Navigator.push(context, MaterialPageRoute(builder: (context) => ConnectionScreen()));
             },
             child: Text(
               'Try Now',
@@ -67,7 +69,7 @@ class _LandingPageState extends State<LandingPage> {
                 fontWeight: FontWeight.w600,
               ),
             ),
-          )
+          ): Container()
 
         ],
       ),
@@ -84,7 +86,6 @@ class _LandingPageState extends State<LandingPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               _sectionOne(context),
-
               SizedBox(height: height * 0.1),
               _featureSection(context, height),
               SizedBox(height: height * 0.1),
@@ -145,7 +146,7 @@ class _LandingPageState extends State<LandingPage> {
       children: [
         GestureDetector(
           onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => ConnectionScreen()));
           },
           child: Container(
             width: 210,
