@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
+import '../utils/responsive.dart';
 import 'chat_page.dart';
 
 class MediatorPage extends StatefulWidget {
@@ -43,13 +44,15 @@ class _MediatorPageState extends State<MediatorPage> with WidgetsBindingObserver
       extendBodyBehindAppBar: false,
       backgroundColor: const Color(0xff181818),
       appBar: AppBar(
+        centerTitle:  Responsive.isDesktop(context)? false:true,
+
         backgroundColor: Colors.transparent,
         title: Text(
           "Converse With",
           style: GoogleFonts.tomorrow(
             textStyle: TextStyle(
               color: Colors.white,
-              fontSize: 32,
+              fontSize:Responsive.isDesktop(context)?32: 24,
               fontWeight: FontWeight.w800,
             ),
           ),
