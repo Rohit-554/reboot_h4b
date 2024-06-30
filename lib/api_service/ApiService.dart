@@ -18,6 +18,7 @@ class ApiService {
   static const String connectUrl = '$baseUrl/connect_old';
   static const String chatUrl = '$baseUrl/generate_response';
   static const String closeConnectionUrl = '$baseUrl/close_connection';
+  static const String analysisUrl = '$baseUrl/analyze';
 
   final Dio dio = Dio();
 
@@ -58,6 +59,18 @@ class ApiService {
     } catch (e) {
       return ApiResponse(error: 'Unexpected error: $e');
     }
+  }
+
+  Future<String> getAnalysis() async{
+    try{
+      final response = await dio.get(analysisUrl);
+      if(response.statusCode == 200){
+        return response.data;
+      }
+    }catch(e){
+      return "No Analysis Found";
+    }
+    return "Not found";
   }
 
   void disconnect(WidgetRef ref) async{

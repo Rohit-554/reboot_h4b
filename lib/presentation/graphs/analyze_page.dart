@@ -22,7 +22,7 @@ class _AnalyzePageState extends State<AnalyzePage> {
   @override
   void initState() {
     super.initState();
-   /* String correctedResponse = widget.dataPointsBundle.replaceAll("'", '"');*/
+
     print("This is again data ${widget.dataPointsBundle}");
     data = convertStringToMap(widget.dataPointsBundle);
     print("This is data bundle: ${data}");
@@ -56,7 +56,6 @@ class BarChartSample1State extends State<BarChartSample1> {
   final Duration animDuration = const Duration(milliseconds: 250);
   int touchedIndex = -1;
   bool isPlaying = false;
-
   @override
   Widget build(BuildContext context) {
     List<String> productNames = widget.data.keys.toList();
@@ -91,7 +90,7 @@ class BarChartSample1State extends State<BarChartSample1> {
                     Expanded(
                       child: buildBarChart(productNames, revenues, 'Total Revenue'),
                     ),
-                    Expanded(
+                    if (sales!=null) Expanded(
                       child: buildBarChart(productNames, sales, 'Sales'),
                     ),
                   ],
