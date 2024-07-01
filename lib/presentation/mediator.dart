@@ -1,8 +1,11 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:tiktik_v/api_service/ApiService.dart';
+import 'package:tiktik_v/presentation/graphs/analyze_page.dart';
 
 import '../utils/responsive.dart';
 import 'chat_page.dart';
@@ -125,7 +128,6 @@ class _MediatorPageState extends State<MediatorPage>
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-
                         Container(
                             decoration: BoxDecoration(
                                 color: Colors.blue,
@@ -179,7 +181,6 @@ class _MediatorPageState extends State<MediatorPage>
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-
                         Container(
                             decoration: BoxDecoration(
                                 color: Colors.blue,
@@ -249,7 +250,9 @@ class _MediatorPageState extends State<MediatorPage>
               _buildLottieContent('assets/dino.json', 'Switch to Offline'),
               () {}),
           _buildActionContainer(height / 3, width / 5.1, Colors.transparent,
-              _buildLottieContent('assets/graph.json', 'Visualize'), () {}),
+              _buildLottieContent('assets/graph.json', 'Visualize'), () {
+                navigateToAnalyzePage(context);
+              }),
           _buildActionContainer(height / 3, width / 5.1, Colors.transparent,
               _buildLottieContent('assets/orb.json', 'Converse Now'), () {
             Navigator.push(context,
@@ -268,7 +271,9 @@ class _MediatorPageState extends State<MediatorPage>
               () {}),
           const SizedBox(height: 20),
           _buildActionContainer(height / 3, width, Colors.transparent,
-              _buildLottieContent('assets/graph.json', 'Visualize'), () {}),
+              _buildLottieContent('assets/graph.json', 'Visualize'), () {
+            navigateToAnalyzePage(context);
+              }),
           const SizedBox(height: 20),
           _buildActionContainer(height / 3, width, Colors.transparent,
               _buildLottieContent('assets/orb.json', 'Converse Now'), () {
@@ -278,6 +283,33 @@ class _MediatorPageState extends State<MediatorPage>
         ],
       );
     }
+  }
+
+  Future<String> getAnalysisResult() async{
+    try{
+      return await ApiService().getAnalysis();
+    }catch(e){
+      return Future.error(e);
+    }
+  }
+
+  void navigateToAnalyzePage(BuildContext context) async {
+    try {
+      String result = await getAnalysisResult();
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => AnalyzePage(dataPointsBundle: '',)),
+      );
+    } catch (e) {
+      // Handle the error, e.g., show a message to the user
+      print('Error: $e');
+    }
+  }
+
+  List<double> generateRandomList() {
+    final random = Random();
+    final List<double> randomList = List<double>.generate(8, (_) => 5000 + random.nextDouble() * 3000);
+    return randomList;
   }
 
   Widget _buildLottieContent(String assetPath, String label) {

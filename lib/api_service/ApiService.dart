@@ -62,7 +62,7 @@ class ApiService {
   }
 
   Future<String> getAnalysis() async{
-    try{
+    try{print("analysis try block");
       final response = await dio.get(analysisUrl);
       if(response.statusCode == 200){
         return response.data;

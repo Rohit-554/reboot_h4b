@@ -1,7 +1,11 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:decimal/decimal.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:tiktik_v/presentation/pie_chart.dart';
 
 Map<String, dynamic> convertStringToMap(String jsonString) {
   return jsonDecode(jsonString);
@@ -9,7 +13,6 @@ Map<String, dynamic> convertStringToMap(String jsonString) {
 
 class AnalyzePage extends StatefulWidget {
   final String dataPointsBundle;
-
   AnalyzePage({required this.dataPointsBundle});
 
   @override
@@ -23,7 +26,6 @@ class _AnalyzePageState extends State<AnalyzePage> {
   void initState() {
     super.initState();
 
-    print("This is again data ${widget.dataPointsBundle}");
     data = convertStringToMap(widget.dataPointsBundle);
     print("This is data bundle: ${data}");
   }
@@ -31,17 +33,65 @@ class _AnalyzePageState extends State<AnalyzePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xff1b2339),
       appBar: AppBar(
         title: Text('Analyze Page'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: BarChartSample1(data: data),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: widget.dataPointsBundle.isNotEmpty
+              ? BarChartSample1(data: data) // Assuming dataList holds data for BarChart
+              : Column(
+                children: [
+                  _showCharts(),
+                ],
+              )
+        ),
       ),
     );
   }
+
+  Widget _showCharts(){
+    return Image.asset("assets/ij.png");
+   /* print("andar ai");
+    return Row(
+      children: [
+        Center(child: PieChartSample2(values: dataList, productName: productNames)),
+      ],
+    );*/
+  }
+
+  Map<String, dynamic> generateRandomMap() {
+    final random = Random();
+    List<String> selectedProducts = productNames.sublist(0, 6); // Selecting first 8 products
+
+    Map<String, dynamic> randomMap = {};
+    for (String productName in selectedProducts) {
+      double totalRevenue = 5000 + random.nextDouble() * 3000;
+      int sale = random.nextInt(5000); // Assuming sale range from 0 to 5000
+      randomMap[productName] = {
+        'total_revenue': totalRevenue,
+        'sale': sale,
+      };
+    }
+
+    return randomMap;
+  }
+
 }
+
+List<String> productNames = [
+  "Field & Stream Sportsman 16 Gun Fire Safe",
+  "Perfect Fitness Perfect Rip Deck",
+  "Diamondback Women's Serene Classic Comfort Bi",
+  "Fitbit Zip Wireless Activity Tracker",
+  "OontZ Angle 3 Portable Bluetooth Speaker",
+  "AmazonBasics 15.6-Inch Laptop and Tablet Bag"
+];
+
+
+
 
 class BarChartSample1 extends StatefulWidget {
   final Map<String, dynamic> data;
@@ -56,6 +106,7 @@ class BarChartSample1State extends State<BarChartSample1> {
   final Duration animDuration = const Duration(milliseconds: 250);
   int touchedIndex = -1;
   bool isPlaying = false;
+
   @override
   Widget build(BuildContext context) {
     List<String> productNames = widget.data.keys.toList();
@@ -86,12 +137,54 @@ class BarChartSample1State extends State<BarChartSample1> {
                 ),
                 const SizedBox(height: 38),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
-                      child: buildBarChart(productNames, revenues, 'Total Revenue'),
+                      child: Container(
+                        margin: EdgeInsets.symmetric(horizontal: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.2), // Adjust opacity for glass effect
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.3), // Box shadow with opacity
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: Offset(0, 3), // changes position of shadow
+                            ),
+                          ],
+                        ),
+                        child: Center(
+                          child: buildBarChart(productNames, revenues, 'Total Revenue'),
+                        ),
+                      ),
                     ),
-                    if (sales!=null) Expanded(
-                      child: buildBarChart(productNames, sales, 'Sales'),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.symmetric(horizontal: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.2), // Adjust opacity for glass effect
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.grey.withOpacity(0.3), // Box shadow with opacity
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: Offset(0, 3), // changes position of shadow
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+                            Text("Total Sales",style: TextStyle(fontWeight: FontWeight.bold),),
+                            Center(
+                              child: PieChartSample2(values: sales, productName: productNames),
+                            ),
+                          ]
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -222,7 +315,7 @@ class BarChartSample1State extends State<BarChartSample1> {
         ),
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
-            showTitles: true,
+            showTitles: false,
             getTitlesWidget: (double value, TitleMeta meta) {
               return SideTitleWidget(
                 axisSide: meta.axisSide,
@@ -302,4 +395,5 @@ class BarChartSample1State extends State<BarChartSample1> {
     }
   }
 }
+
 
